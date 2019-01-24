@@ -1,0 +1,16 @@
+source: 
+  type: bd
+  connstring:
+  table: testable
+  structure: 
+    - fields: value1
+    - field2: value2
+    - field3: value3
+  bdtype: mysql
+destination: 
+  type: db
+  table: testtable
+  structure: 
+  - fields: value1
+  - field2: value2
+  - field3: value3

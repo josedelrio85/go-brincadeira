@@ -1,0 +1,15 @@
+source: 
+  type: url
+  url: http://localhost/test
+  method: GET
+  params:
+    - param1: param1
+    - param2: param2
+  response: json
+destination: 
+  type: db
+  table: testtable
+  structure: 
+  - fields: value1
+  - field2: value2
+  - field3: value3

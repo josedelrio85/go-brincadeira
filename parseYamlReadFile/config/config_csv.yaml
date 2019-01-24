@@ -1,0 +1,11 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\csv\test.csv
+  extension: csv
+destination: 
+  type: db
+  table: testtable
+  structure: 
+  - fields: value1
+  - field2: value2
+  - field3: value3
