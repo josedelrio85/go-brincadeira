@@ -1,11 +1,11 @@
 source: 
   type: file
-  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test.json
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test_2.json
   extension: json
 destination: 
   type: db
-  table: testtable
+  table: webservice.sources
   structure: 
-  - fields: value1
-  - field2: value2
-  - field3: value3
+   - sou_id
+   - sou_description
+   - sou_idcrm

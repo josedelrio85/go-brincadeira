@@ -4,8 +4,12 @@ source:
   extension: csv
 destination: 
   type: db
-  table: testtable
+  table: webservice.evo_formalizadas_sf_v2
   structure: 
-  - fields: value1
-  - field2: value2
-  - field3: value3
+   - NOMBRE
+   - CLIENTID
+   - NUMERO_PROCESO_CONTRATACION
+   - PRODUCTO
+   - NUMERO_EXPEDIENTE
+   - ID_PERSONA_IRIS
+   - FECHA_FORMALIZACION

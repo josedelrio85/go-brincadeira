@@ -6,6 +6,6 @@ destination:
   type: db
   table: testtable
   structure: 
-  - fields: value1
-  - field2: value2
-  - field3: value3
+   - fields: value1
+   - field2: value2
+   - field3: value3
