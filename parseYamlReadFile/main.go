@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"encoding/xml"
@@ -8,6 +9,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -27,15 +30,16 @@ type Fileconfig struct {
 		Extension string `yaml:"extension"`
 	} `yaml:"source"`
 	Destination struct {
-		Tipo       string `yaml:"type"`
-		Tabla      string `yaml:"table"`
-		Estructura []struct {
-			Field1 string `yaml:"field1"`
-			Field2 string `yaml:"field2"`
-			Field3 string `yaml:"field3"`
-			Field4 string `yaml:"field4"`
-		} `yaml:"structure"`
+		Tipo       string   `yaml:"type"`
+		Tabla      string   `yaml:"table"`
+		Estructura []string `yaml:"structure"`
 	} `yaml:"destination"`
+}
+
+type Where struct {
+	Campos       []string
+	CamposWhere  map[string]string
+	CamposInsert map[string][]string
 }
 
 func readconfig() {
@@ -64,19 +68,25 @@ func readconfig() {
 }
 
 func switchextension(fc Fileconfig) {
-	var rows map[string]interface{}
+	// var rows map[string]interface{}
+	var rows map[string][]string
 	var err error
 	path := fc.Source.Path
 
 	switch fc.Source.Extension {
 	case "xlsx":
-		rows, err = processxlsx(path)
+		// rows, err = processxlsx(path)
 	case "csv":
 		rows, err = processcsv(path)
 	case "json":
-		rows, err = processjson(path)
+		a, ferr := processjson(path)
+		if ferr != nil {
+			log.Println(ferr)
+			return
+		}
+		rows = hazcosasconinterfaz(a)
 	case "xml":
-		rows, err = processxml(path)
+		// rows, err = processxml(path)
 	default:
 		panic("switchextension error")
 	}
@@ -87,11 +97,9 @@ func switchextension(fc Fileconfig) {
 	}
 
 	fmt.Println(rows)
-
-	iterateoverrows(rows)
 }
 
-func processcsv(filename string) (res map[string]interface{}, err error) {
+func processcsv(filename string) (res map[string][]string, err error) {
 
 	file, ferr := os.Open(filename)
 	if ferr != nil {
@@ -106,18 +114,11 @@ func processcsv(filename string) (res map[string]interface{}, err error) {
 		return nil, csverr
 	}
 
-	res = make(map[string]interface{})
+	res = make(map[string][]string)
 	for k, z := range rows {
-		res[strconv.Itoa(k)] = z
+		r := strings.Split(z[0], ";")
+		res[strconv.Itoa(k)] = r
 	}
-
-	// fmt.Println(res)
-	// fmt.Println("---------------")
-
-	// for h, j := range res {
-	// 	fmt.Println("h %s \n", h)
-	// 	fmt.Println("j %s \n", j)
-	// }
 	return res, nil
 }
 
@@ -139,7 +140,12 @@ func processxlsx(filename string) (res map[string]interface{}, err error) {
 	return res, nil
 }
 
-func processjson(filename string) (res map[string]interface{}, err error) {
+type OrderedMap struct {
+	Order []string
+	Map   []interface{}
+}
+
+func processjson(filename string) (res []interface{}, err error) {
 	file, ferr := os.Open(filename)
 	if ferr != nil {
 		log.Println(ferr)
@@ -153,11 +159,20 @@ func processjson(filename string) (res map[string]interface{}, err error) {
 		return nil, err
 	}
 
-	// var result map[string]interface{}
-	res = make(map[string]interface{})
-	json.Unmarshal([]byte(byteValue), &res)
+	om := OrderedMap{}
+	json.Unmarshal([]byte(byteValue), &om.Map)
 
-	return res, nil
+	index := make(map[string]int)
+	for key := range om.Map {
+		om.Order = append(om.Order, string(key))
+		esc, _ := json.Marshal(key) //Escape the key
+		index[string(key)] = bytes.Index([]byte(byteValue), esc)
+		fmt.Println(index[string(key)])
+	}
+	sort.Slice(om.Order, func(i, j int) bool { return index[om.Order[i]] < index[om.Order[j]] })
+
+	// fmt.Println(om.Map)
+	return om.Map, nil
 }
 
 func processxml(filename string) (res map[string]interface{}, err error) {
@@ -180,30 +195,6 @@ func processxml(filename string) (res map[string]interface{}, err error) {
 	return res, nil
 }
 
-func iterateoverrows(rows map[string]interface{}) {
-	// nombres de las columnas
-	return
-	// cols := rows[:1]
-	// fmt.Print(cols)
-
-	// columns := make([]interface{}, len(cols))
-	// columnPointers := make([]interface{}, len(cols))
-	// for z := range columns {
-	// 	columnPointers[z] = &columns[z]
-	// }
-
-	// fmt.Println(columnPointers)
-	// for _ = range rows {
-	// 	columns := make([]interface{}, len(cols))
-	// 	columnPointers := make([]interface{}, len(cols))
-	// 	for z := range columns {
-	// 		columnPointers[z] = &columns[z]
-	// 	}
-
-	// 	fmt.Println(columnPointers)
-	// }
-}
-
 func StrToMap(in string) map[string]interface{} {
 	res := make(map[string]interface{})
 	array := strings.Split(in, " ")
@@ -213,4 +204,36 @@ func StrToMap(in string) map[string]interface{} {
 		res[temp[0]] = temp[1]
 	}
 	return res
+}
+
+func hazcosasconinterfaz(res []interface{}) map[string][]string {
+
+	b := make(map[string][]string)
+	value := ""
+	for z, r := range res {
+		s := reflect.ValueOf(r)
+
+		m, ok := r.(map[string]interface{})
+		if !ok {
+			fmt.Errorf("want type map[string]interface{};  got %T", s)
+		}
+		var a []string
+
+		for _, v := range m {
+			// fmt.Println(k, "=>", v)
+			switch v.(type) {
+			case float64:
+				value = strconv.FormatFloat(v.(float64), 'f', 6, 64)
+			case int:
+				value = strconv.FormatInt(v.(int64), 'i')
+			case bool, string:
+				value = v.(string)
+			default:
+				// fmt.Println("type unknown") // here v has type interface{}
+			}
+			a = append(a, value)
+		}
+		b[string(z)] = a
+	}
+	return b
 }
