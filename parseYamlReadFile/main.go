@@ -40,10 +40,9 @@ type Fileconfig struct {
 	} `yaml:"destination"`
 }
 
-type Where struct {
-	Campos       []string
-	CamposWhere  map[string]string
-	CamposInsert map[string][]string
+type RowList struct {
+	Keys []int
+	Rows map[int][]string
 }
 
 func readconfig() {
