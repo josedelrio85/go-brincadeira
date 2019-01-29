@@ -1,7 +1,16 @@
-loadFirmasExcel/firmas*
-
-loadFormalizadasCSV/formalizadas*
-
 loadFirmasExcel_log
 
 loadFormalizadasCSV_log
+
+*.exe
+
+*.xlsx
+
+loadFirmasExcel/*.exe
+
+loadFirmasExcel/*.xlsx
+
+
+loadFormalizadasCSV/*.exe
+
+loadFormalizadasCSV/*.xlsx
