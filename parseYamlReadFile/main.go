@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"encoding/xml"
@@ -179,7 +178,7 @@ func readxml(filename string) (res map[string]interface{}, err error) {
 	return res, nil
 }
 
-func processjson(filename string) (res []interface{}, err error) {
+func readjson(filename string) (data []byte, err error) {
 	file, ferr := os.Open(filename)
 	if ferr != nil {
 		log.Println(ferr)
@@ -192,51 +191,68 @@ func processjson(filename string) (res []interface{}, err error) {
 		log.Println(err)
 		return nil, err
 	}
-
-	om := OrderedMap{}
-	json.Unmarshal([]byte(byteValue), &om.Map)
-
-	index := make(map[string]int)
-	for key := range om.Map {
-		om.Order = append(om.Order, string(key))
-		esc, _ := json.Marshal(key) //Escape the key
-		index[string(key)] = bytes.Index([]byte(byteValue), esc)
-		fmt.Println(index[string(key)])
-	}
-	sort.Slice(om.Order, func(i, j int) bool { return index[om.Order[i]] < index[om.Order[j]] })
-
-	// fmt.Println(om.Map)
-	return om.Map, nil
+	return byteValue, nil
 }
 
-func hazcosasconinterfaz(res []interface{}) map[string][]string {
+func processjson(data []byte, fc *Fileconfig) (result RowList, err error) {
 
-	b := make(map[string][]string)
-	value := ""
-	for z, r := range res {
-		s := reflect.ValueOf(r)
+	var v []interface{}
+	json.Unmarshal(data, &v)
 
-		m, ok := r.(map[string]interface{})
+	result, err = generateorderdestructureforjson(v, fc)
+	return result, err
+}
+
+func generateorderdestructureforjson(res []interface{}, fc *Fileconfig) (result RowList, err error) {
+
+	rl := make(map[int][]string)
+	var keys []int
+
+	for k, z := range res {
+		s := reflect.ValueOf(z)
+		keys = append(keys, k)
+
+		m, ok := z.(map[string]interface{})
 		if !ok {
 			fmt.Errorf("want type map[string]interface{};  got %T", s)
 		}
-		var a []string
 
-		for _, v := range m {
-			// fmt.Println(k, "=>", v)
+		var a []string
+		b := make(map[int]string, len(m))
+		value := ""
+
+		var keysalt []int
+		for i, v := range m {
+
 			switch v.(type) {
 			case float64:
-				value = strconv.FormatFloat(v.(float64), 'f', 6, 64)
+				value = fmt.Sprintf("%.0f", v.(float64))
 			case int:
 				value = strconv.FormatInt(v.(int64), 'i')
 			case bool, string:
 				value = v.(string)
 			default:
-				// fmt.Println("type unknown") // here v has type interface{}
+				fmt.Println("type unknown")
 			}
-			a = append(a, value)
+
+			for _, estrucjson := range fc.Destination.EstructuraJSON {
+				if estrucjson.Field == i {
+					keysalt = append(keysalt, estrucjson.Order)
+					// fmt.Println("order: ", estrucjson.Order, " field: ", estrucjson.Field, " value: ", value)
+					b[estrucjson.Order] = value
+				}
+			}
+			sort.Ints(keysalt)
 		}
-		b[string(z)] = a
+
+		for _, k := range keysalt {
+			a = append(a, b[k])
+		}
+		rl[k] = a
 	}
-	return b
+
+	result.Keys = keys
+	result.Rows = rl
+
+	return result, nil
 }
