@@ -45,6 +45,16 @@ type RowList struct {
 	Rows map[int][]string
 }
 
+func (r RowList) orderedList() {
+	for _, k := range r.Keys {
+		fmt.Println("key: ", k, " value: ", r.Rows[k])
+		// for i, zz := range r.Rows[k] {
+		// 	fmt.Println("i: ", i)
+		// 	fmt.Println(zz)
+		// }
+	}
+}
+
 func readconfig() {
 	// 	TO DO: We should pass file path by parameter
 
