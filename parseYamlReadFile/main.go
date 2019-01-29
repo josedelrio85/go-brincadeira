@@ -30,9 +30,13 @@ type Fileconfig struct {
 		Extension string `yaml:"extension"`
 	} `yaml:"source"`
 	Destination struct {
-		Tipo       string   `yaml:"type"`
-		Tabla      string   `yaml:"table"`
-		Estructura []string `yaml:"structure"`
+		Tipo           string   `yaml:"type"`
+		Tabla          string   `yaml:"table"`
+		Estructura     []string `yaml:"structure"`
+		EstructuraJSON []struct {
+			Field string `yaml:"field"`
+			Order int    `yaml:"order"`
+		} `yaml:"structurejson"`
 	} `yaml:"destination"`
 }
 
