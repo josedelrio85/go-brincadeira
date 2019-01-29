@@ -6,6 +6,13 @@ destination:
   type: db
   table: webservice.sources
   structure: 
-   - sou_id
-   - sou_description
-   - sou_idcrm
+  structurejson: 
+   - 
+    field: sou_id
+    order: 1
+   - 
+    field: sou_description
+    order: 2
+   - 
+    field: sou_idcrm
+    order: 3
