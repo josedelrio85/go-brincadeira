@@ -135,27 +135,48 @@ func readcsv(filename string) (result RowList, err error) {
 	return result, nil
 }
 
-func processxlsx(filename string) (res map[string]interface{}, err error) {
+func readxlsx(filename string) (result RowList, err error) {
 
-	res = make(map[string]interface{})
 	file, ferr := excelize.OpenFile(filename)
 	if ferr != nil {
 		log.Println(err)
-		return nil, ferr
+		return RowList{}, ferr
 	}
 
+	res := make(map[int][]string)
+	var keys []int
 	for _, name := range file.GetSheetMap() {
 		rows := file.GetRows(name)
 		for k, z := range rows {
-			res[strconv.Itoa(k)] = z
+			keys = append(keys, k)
+			res[k] = z
 		}
+		sort.Ints(keys)
 	}
-	return res, nil
+
+	result.Keys = keys
+	result.Rows = res
+	return result, nil
 }
 
-type OrderedMap struct {
-	Order []string
-	Map   []interface{}
+func readxml(filename string) (res map[string]interface{}, err error) {
+	file, ferr := os.Open(filename)
+	if ferr != nil {
+		log.Println(ferr)
+		return nil, ferr
+	}
+	defer file.Close()
+
+	byteValue, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	res = make(map[string]interface{})
+	xml.Unmarshal([]byte(byteValue), &res)
+
+	return res, nil
 }
 
 func processjson(filename string) (res []interface{}, err error) {
@@ -186,37 +207,6 @@ func processjson(filename string) (res []interface{}, err error) {
 
 	// fmt.Println(om.Map)
 	return om.Map, nil
-}
-
-func processxml(filename string) (res map[string]interface{}, err error) {
-	file, ferr := os.Open(filename)
-	if ferr != nil {
-		log.Println(ferr)
-		return nil, ferr
-	}
-	defer file.Close()
-
-	byteValue, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	res = make(map[string]interface{})
-	xml.Unmarshal([]byte(byteValue), &res)
-
-	return res, nil
-}
-
-func StrToMap(in string) map[string]interface{} {
-	res := make(map[string]interface{})
-	array := strings.Split(in, " ")
-	temp := make([]string, 2)
-	for _, val := range array {
-		temp = strings.Split(string(val), ":")
-		res[temp[0]] = temp[1]
-	}
-	return res
 }
 
 func hazcosasconinterfaz(res []interface{}) map[string][]string {
