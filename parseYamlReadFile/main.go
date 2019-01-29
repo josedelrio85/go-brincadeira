@@ -56,28 +56,54 @@ func (r RowList) orderedList() {
 }
 
 func readconfig() {
-	// 	TO DO: We should pass file path by parameter
-
-	// file, err := os.Open("./config/config_xlsx.yaml")
-	// file, err := os.Open("./config/config_csv.yaml")
-	// file, err := os.Open("./config/config_json.yaml")
-	file, err := os.Open("./config/config_xml.yaml")
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer file.Close()
-
-	fc := Fileconfig{}
-	data, err := ioutil.ReadAll(file)
-
-	err = yaml.Unmarshal([]byte(data), &fc)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-		return
-	}
-	switchextension(fc)
+	func readconfig() {
+		// 	TO DO: We should pass file path by parameter
+	
+		// file, err := os.Open("./config/config_xlsx.yaml")
+		// file, err := os.Open("./config/config_csv.yaml")
+		// file, err := os.Open("./config/config_json.yaml")
+		file, err := os.Open("./config/config_json_case2.yaml")
+		// file, err := os.Open("./config/config_xml.yaml")
+	
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		defer file.Close()
+	
+		fc := Fileconfig{}
+		data, err := ioutil.ReadAll(file)
+	
+		err = yaml.Unmarshal([]byte(data), &fc)
+		if err != nil {
+			log.Fatalf("error: %v", err)
+			return
+		}
+	
+		rowlist := RowList{}
+		var rerr error
+		var a []byte
+	
+		switch fc.Source.Extension {
+		case "xlsx":
+			rowlist, rerr = readxlsx(fc.Source.Path)
+		case "csv":
+			rowlist, rerr = readcsv(fc.Source.Path)
+		case "json":
+			a, rerr = readjson(fc.Source.Path)
+			rowlist, rerr = processjson(a, &fc)
+		case "xml":
+			readxml(fc.Source.Path)
+		default:
+			panic("switchextension error")
+		}
+	
+		if rerr != nil {
+			log.Println(rerr)
+			panic(rerr)
+		}
+	
+		rowlist.orderedList()
 }
 
 func switchextension(fc Fileconfig) {
