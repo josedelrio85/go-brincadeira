@@ -56,109 +56,83 @@ func (r RowList) orderedList() {
 }
 
 func readconfig() {
-	func readconfig() {
-		// 	TO DO: We should pass file path by parameter
-	
-		// file, err := os.Open("./config/config_xlsx.yaml")
-		// file, err := os.Open("./config/config_csv.yaml")
-		// file, err := os.Open("./config/config_json.yaml")
-		file, err := os.Open("./config/config_json_case2.yaml")
-		// file, err := os.Open("./config/config_xml.yaml")
-	
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		defer file.Close()
-	
-		fc := Fileconfig{}
-		data, err := ioutil.ReadAll(file)
-	
-		err = yaml.Unmarshal([]byte(data), &fc)
-		if err != nil {
-			log.Fatalf("error: %v", err)
-			return
-		}
-	
-		rowlist := RowList{}
-		var rerr error
-		var a []byte
-	
-		switch fc.Source.Extension {
-		case "xlsx":
-			rowlist, rerr = readxlsx(fc.Source.Path)
-		case "csv":
-			rowlist, rerr = readcsv(fc.Source.Path)
-		case "json":
-			a, rerr = readjson(fc.Source.Path)
-			rowlist, rerr = processjson(a, &fc)
-		case "xml":
-			readxml(fc.Source.Path)
-		default:
-			panic("switchextension error")
-		}
-	
-		if rerr != nil {
-			log.Println(rerr)
-			panic(rerr)
-		}
-	
-		rowlist.orderedList()
-}
+	// 	TO DO: We should pass file path by parameter
 
-func switchextension(fc Fileconfig) {
-	// var rows map[string]interface{}
-	var rows map[string][]string
-	var err error
-	path := fc.Source.Path
-
-	switch fc.Source.Extension {
-	case "xlsx":
-		// rows, err = processxlsx(path)
-	case "csv":
-		rows, err = processcsv(path)
-	case "json":
-		a, ferr := processjson(path)
-		if ferr != nil {
-			log.Println(ferr)
-			return
-		}
-		rows = hazcosasconinterfaz(a)
-	case "xml":
-		// rows, err = processxml(path)
-	default:
-		panic("switchextension error")
-	}
+	// file, err := os.Open("./config/config_xlsx.yaml")
+	// file, err := os.Open("./config/config_csv.yaml")
+	// file, err := os.Open("./config/config_json.yaml")
+	file, err := os.Open("./config/config_json_case2.yaml")
+	// file, err := os.Open("./config/config_xml.yaml")
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
+	defer file.Close()
 
-	fmt.Println(rows)
+	fc := Fileconfig{}
+	data, err := ioutil.ReadAll(file)
+
+	err = yaml.Unmarshal([]byte(data), &fc)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+		return
+	}
+
+	rowlist := RowList{}
+	var rerr error
+	var a []byte
+
+	switch fc.Source.Extension {
+	case "xlsx":
+		rowlist, rerr = readxlsx(fc.Source.Path)
+	case "csv":
+		rowlist, rerr = readcsv(fc.Source.Path)
+	case "json":
+		a, rerr = readjson(fc.Source.Path)
+		rowlist, rerr = processjson(a, &fc)
+	case "xml":
+		readxml(fc.Source.Path)
+	default:
+		panic("switchextension error")
+	}
+
+	if rerr != nil {
+		log.Println(rerr)
+		panic(rerr)
+	}
+
+	rowlist.orderedList()
 }
 
-func processcsv(filename string) (res map[string][]string, err error) {
+func readcsv(filename string) (result RowList, err error) {
 
 	file, ferr := os.Open(filename)
 	if ferr != nil {
 		log.Println(ferr)
-		return nil, ferr
+		return RowList{}, ferr
 	}
 	defer file.Close()
 
 	rows, csverr := csv.NewReader(file).ReadAll()
 	if csverr != nil {
 		log.Println(csverr)
-		return nil, csverr
+		return RowList{}, csverr
 	}
 
-	res = make(map[string][]string)
+	res := make(map[int][]string)
+	var keys []int
 	for k, z := range rows {
+		keys = append(keys, k)
 		r := strings.Split(z[0], ";")
-		res[strconv.Itoa(k)] = r
+		res[k] = r
 	}
-	return res, nil
+	sort.Ints(keys)
+
+	result.Keys = keys
+	result.Rows = res
+
+	return result, nil
 }
 
 func processxlsx(filename string) (res map[string]interface{}, err error) {
