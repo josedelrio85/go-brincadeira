@@ -199,11 +199,11 @@ func processjson(data []byte, fc *Fileconfig) (result RowList, err error) {
 	var v []interface{}
 	json.Unmarshal(data, &v)
 
-	result, err = generateorderdestructureforjson(v, fc)
+	result, err = generateorderedestructureforjson(v, fc)
 	return result, err
 }
 
-func generateorderdestructureforjson(res []interface{}, fc *Fileconfig) (result RowList, err error) {
+func generateorderedestructureforjson(res []interface{}, fc *Fileconfig) (result RowList, err error) {
 
 	rl := make(map[int][]string)
 	var keys []int
@@ -255,4 +255,81 @@ func generateorderdestructureforjson(res []interface{}, fc *Fileconfig) (result 
 	result.Rows = rl
 
 	return result, nil
+}
+
+func (r RowList) insertStatement(fc *Fileconfig) (sql string) {
+
+	sql = "INSERT INTO " + fc.Destination.Tabla + " ( "
+
+	if fc.Source.Extension == "json" {
+		for _, k := range fc.Destination.EstructuraJSON {
+			sql += k.Field + ","
+		}
+	} else {
+		for _, k := range fc.Destination.Estructura {
+			sql += k + ","
+		}
+	}
+
+	sql = strings.TrimSuffix(sql, ",")
+	sql += " ) VALUES "
+
+	for _, k := range r.Keys {
+		sqlWhere := " ( "
+		tam := len(r.Rows[k])
+		if tam > 0 {
+			for _, value := range r.Rows[k] {
+				sqlWhere += "'" + value + "'"
+				if tam > 1 {
+					sqlWhere += ", "
+				}
+			}
+			sqlWhere = strings.TrimSuffix(sqlWhere, ", ")
+			sql += sqlWhere + " ), "
+		}
+	}
+	sql = strings.TrimSuffix(sql, ", ")
+	fmt.Println(sql)
+	return sql
+}
+
+func (r RowList) insertPreparedStatement(fc *Fileconfig) (stmtStr string, finalArgs []interface{}) {
+
+	sql := "INSERT INTO " + fc.Destination.Tabla + " ( "
+
+	if fc.Source.Extension == "json" {
+		for _, k := range fc.Destination.EstructuraJSON {
+			sql += k.Field + ","
+		}
+	} else {
+		for _, k := range fc.Destination.Estructura {
+			sql += k + ","
+		}
+	}
+	sql = strings.TrimSuffix(sql, ",")
+	sql += " ) VALUES %s"
+	//////// hasta aquí => inser into (c1, c2, c3, .... ) values (
+
+	final := make([]string, len(r.Keys))
+	finalArgs = []interface{}{}
+
+	for _, k := range r.Keys {
+		tam := len(r.Rows[k])
+		if tam > 0 {
+			// create a mini-statement like (?,?,....,?) with the size of the elements of the row
+			valueStrings := make([]string, 0, tam)
+			for i := 0; i < tam; i++ {
+				valueStrings = append(valueStrings, "?")
+			}
+			final[k] = "(" + strings.TrimSuffix(strings.Join(valueStrings, ","), ",") + ")"
+			//array of interfaces with the values that will be executed by stmt.Exec
+			finalArgs = append(finalArgs, r.Rows[k])
+		}
+	}
+	stmtStr = fmt.Sprintf(sql, strings.Join(final, ","))
+
+	fmt.Println(stmtStr)
+	fmt.Println(finalArgs)
+
+	return stmtStr, finalArgs
 }
