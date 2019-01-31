@@ -77,14 +77,15 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	altrows := rows[1:]
 
-	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2018-12-01';"
+	// sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2018-12-01';"
+	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
 	_, err := db.Query(sqlTruncate)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,FECHA_FORMALIZACION) VALUES %s"
+	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES %s"
 	final := make([]string, len(altrows))
 	// var finalArgs []interface{}
 	// finalArgs := make([]interface{}, 0, len(altrows))
@@ -92,7 +93,7 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	for z, row := range altrows {
 		r := strings.Split(row[0], ";")
-		t, timerr := time.Parse("02/01/2006 15:04", strings.Trim(r[6], " "))
+		t, timerr := time.Parse("02/01/2006 15:04", strings.Trim(r[7], " "))
 		if timerr != nil {
 			log.Println(timerr)
 			log.Println(t)
@@ -105,14 +106,14 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 			valueStrings = append(valueStrings, "?")
 		}
 		final[z] = "(" + strings.TrimSuffix(strings.Join(valueStrings, ","), ",") + ")"
-		finalArgs = append(finalArgs, r[0], r[1], r[2], r[3], r[4], r[5], t)
+		finalArgs = append(finalArgs, r[0], r[1], r[2], r[3], r[4], r[5], r[6], t)
 	}
 
 	stmtStr := fmt.Sprintf(sql, strings.Join(final, ","))
 	stmt, _ := db.Prepare(stmtStr)
 	_, stmterr := stmt.Exec(finalArgs...)
 	if stmterr != nil {
-		log.Println(finalArgs)
+		// log.Println(finalArgs)
 		log.Println(stmterr)
 		return
 	}
