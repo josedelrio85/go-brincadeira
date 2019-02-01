@@ -6,6 +6,10 @@ loadFormalizadasCSV_log
 
 *.xlsx
 
+*.csv
+
+*.xls
+
 **loadFirmasExcel/*.exe
 
 **loadFirmasExcel/*.xlsx
