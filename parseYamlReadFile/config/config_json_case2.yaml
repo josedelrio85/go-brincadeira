@@ -1,0 +1,39 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test.json
+  extension: json
+destination: 
+  type: db
+  table: test
+  structure: 
+  structurejson: 
+   - 
+    field: id
+    order: 1
+   - 
+    field: nombre_dispositivo
+    order: 2
+   - 
+    field: descripcion_dispositivo
+    order: 3
+   - 
+    field: url_imagen
+    order: 4
+   - 
+    field: precio_anterior
+    order: 5
+   - 
+    field: precio_actual
+    order: 6
+   - 
+    field: porcentaje_descuento
+    order: 7
+   - 
+    field: imagen_procesador
+    order: 8
+   - 
+    field: cta
+    order: 9
+   - 
+    field: url_con_utm
+    order: 10                        

@@ -1,0 +1,15 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\csv\test.csv
+  extension: csv
+destination: 
+  type: db
+  table: webservice.evo_formalizadas_sf_v2
+  structure: 
+   - NOMBRE
+   - CLIENTID
+   - NUMERO_PROCESO_CONTRATACION
+   - PRODUCTO
+   - NUMERO_EXPEDIENTE
+   - ID_PERSONA_IRIS
+   - FECHA_FORMALIZACION

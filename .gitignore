@@ -1,0 +1,16 @@
+loadFirmasExcel_log
+loadFormalizadasCSV_log
+
+#any exe file in all repo
+*.exe
+*.xlsx
+*.xls
+
+#any exe file in loadFirmasExcel folder
+loadFirmasExcel/*.exe
+loadFirmasExcel/*.xlsx
+loadFirmasExcel/*.xls
+
+
+loadFormalizadasCSV/*.exe
+loadFormalizadasCSV/*.csv
