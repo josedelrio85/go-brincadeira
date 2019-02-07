@@ -14,3 +14,6 @@ loadFirmasExcel/*.xls
 
 loadFormalizadasCSV/*.exe
 loadFormalizadasCSV/*.csv
+
+
+testpurpose/
