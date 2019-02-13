@@ -13,3 +13,4 @@ destination:
    - NUMERO_EXPEDIENTE
    - ID_PERSONA_IRIS
    - FECHA_FORMALIZACION
+structurejson:

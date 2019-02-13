@@ -2,38 +2,92 @@ source:
   type: file
   path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test.json
   extension: json
+proccess:
+  type: struct
+  name: Test
+  packagename: generatedstruct
+  structure: 
+   - 
+    structname: Id
+    type: int
+    field: id
+   - 
+    structname: Nombredispositivo    
+    type: string
+    field: nombre_dispositivo
+   - 
+    structname: Descripciondispositivo
+    type: string
+    field: descripcion_dispositivo
+   -
+    structname: Urlimagen
+    type: string
+    field: url_imagen
+   -
+    structname: Precionanterior
+    type: float64
+    field: precio_anterior
+   -
+    structname: Precioactual
+    type: float64
+    field: precio_actual
+   -
+    structname: Porcentajedescuento
+    type: string
+    field: porcentaje_descuento
+   -
+    structname: Imagenprocesador
+    type: string
+    field: imagen_procesador
+   -
+    structname: Cta
+    type: string
+    field: cta
+   -
+    structname: Urlconutm
+    type: string
+    field: url_con_utm                              
 destination: 
   type: db
   table: test
   structure: 
-  structurejson: 
    - 
     field: id
     order: 1
+    type: int
    - 
     field: nombre_dispositivo
     order: 2
+    type: string
    - 
     field: descripcion_dispositivo
     order: 3
+    type: string
    - 
     field: url_imagen
     order: 4
+    type: string
    - 
     field: precio_anterior
     order: 5
+    type: string
    - 
     field: precio_actual
     order: 6
+    type: string
    - 
     field: porcentaje_descuento
     order: 7
+    type: string
    - 
     field: imagen_procesador
     order: 8
+    type: string
    - 
     field: cta
     order: 9
+    type: string    
    - 
     field: url_con_utm
-    order: 10                        
+    order: 10
+    type: string                         

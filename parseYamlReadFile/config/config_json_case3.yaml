@@ -1,0 +1,53 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test_3.json
+  extension: json
+proccess:
+  type: struct
+  name: LogErrorLoadWeborama
+  packagename: generatedstruct
+  structure:
+   - 
+    structname: Lelwid
+    type: int
+    field: lelw_id
+   - 
+    structname: Lelwts
+    type: string
+    field: lelw_ts
+   - 
+    structname: Lelwlasterror
+    type: string
+    field: lelw_lasterror
+   - 
+    structname: Lelwsql
+    type: string
+    field: lelw_sql
+   - 
+    structname: Lelwjsonobj
+    type: string
+    field: lelw_jsonobj
+destination: 
+  type: db
+  table: webservice.log_error_load_weborama
+  structure: 
+   - 
+    field: lelw_id
+    order: 1
+    type: int
+   - 
+    field: lelw_ts
+    order: 2
+    type: DateTime
+   - 
+    field: lelw_lasterror
+    order: 3
+    type: text
+   - 
+    field: lelw_sql
+    order: 4
+    type: text
+   - 
+    field: lelw_jsonobj
+    order: 5    
+    type: text

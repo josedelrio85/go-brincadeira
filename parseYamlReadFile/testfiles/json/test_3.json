@@ -1,0 +1,37 @@
+[
+    {
+        "lelw_id": 1,
+        "lelw_ts": "2018-11-14 11:13:18",
+        "lelw_lasterror": "hola",
+        "lelw_sql": "adios",
+        "lelw_jsonobj": "adios"
+    },
+    {
+        "lelw_id": 2,
+        "lelw_ts": "2018-11-14 15:06:12",
+        "lelw_lasterror": "",
+        "lelw_sql": "asdf",
+        "lelw_jsonobj": "adios"
+    },
+    {
+        "lelw_id": 3,
+        "lelw_ts": "2018-11-14 15:06:21",
+        "lelw_lasterror": "a",
+        "lelw_sql": "rwer",
+        "lelw_jsonobj": "adios"
+    },
+    {
+        "lelw_id": 4,
+        "lelw_ts": "2018-11-14 15:06:30",
+        "lelw_lasterror": "b",
+        "lelw_sql": "werwr",
+        "lelw_jsonobj": "adios"
+    },
+    {
+        "lelw_id": 5,
+        "lelw_ts": "2018-11-14 15:06:39",
+        "lelw_lasterror": "c",
+        "lelw_sql": "asdfadf",
+        "lelw_jsonobj": "adios"
+    }
+]

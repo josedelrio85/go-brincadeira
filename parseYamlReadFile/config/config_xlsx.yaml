@@ -20,4 +20,5 @@ destination:
    - Numero_Expediente 
    - Clase_de_Cliente 
    - Fecha_de_firma 
-   - Tipo_de_identificacion 
+   - Tipo_de_identificacion
+  structurejson:

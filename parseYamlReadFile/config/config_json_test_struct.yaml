@@ -1,0 +1,64 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test_2.json
+  extension: json
+proccess:
+    type: struct
+    name: Sources
+    packagename: generatedstruct
+    structure: 
+     - 
+      structname: Souid
+      type: int
+      field: sou_id
+     - 
+      structname: Soudescription      
+      type: string
+      field: sou_description
+     - 
+      structname: Souidcrm
+      type: int
+      field: sou_idcrm
+     -
+      structname: Soutest
+      type: struct
+      field: sou_test
+      structure:
+        - 
+         structname: TestLevel1
+         type: struct
+         field: sou_test_level1
+         structure:
+          -
+           structname: TestLevel11
+           type: string
+           field: sou_test_level_11
+        - 
+         structname: TestLevel2
+         type: struct
+         field: sou_test_level2
+         structure:
+          -
+           structname: TestLevel21
+           type: string
+           field: sou_test_level21
+          -
+           structname: TestLevel22
+           type: string
+           field: sou_test_level22         
+destination: 
+  type: db
+  table: webservice.sources
+  structure: 
+   - 
+    field: sou_id
+    order: 1
+    type: int
+   - 
+    field: sou_description
+    order: 2
+    type: string
+   - 
+    field: sou_idcrm
+    order: 3
+    type: int

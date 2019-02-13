@@ -2,121 +2,51 @@
     {
         "sou_id": 1,
         "sou_description": "CREDITEA ABANDONADOS",
-        "sou_idcrm": 2
+        "sou_idcrm": 2,
+        "sou_test":[
+            {
+                "sou_test_level1": [
+                    {
+                        "sou_test_level_11": "field1_level11"
+                    }
+                ],
+                "sou_test_level2": [
+                    {
+                        "sou_test_level21": "field1_level21",
+                        "sou_test_level22": "field2_level22"
+                    }
+                ]
+            }
+        ]
     },
     {
         "sou_id": 2,
         "sou_description": " CREDITEA STAND",
-        "sou_idcrm": 3
+        "sou_idcrm": 3,
+        "sou_test":[]
     },
     {
         "sou_id": 3,
         "sou_description": "EVO BANCO",
-        "sou_idcrm": 4
+        "sou_idcrm": 4,
+        "sou_test":[]
     },
     {
         "sou_id": 4,
         "sou_description": "CREDITEA TIMEOUT",
-        "sou_idcrm": 5
+        "sou_idcrm": 5,
+        "sou_test":[]
     },
     {
         "sou_id": 5,
         "sou_description": "R CABLE",
-        "sou_idcrm": 6
+        "sou_idcrm": 6,
+        "sou_test":[]
     },
     {
         "sou_id": 6,
         "sou_description": "BYSIDECAR",
-        "sou_idcrm": 7
-    },
-    {
-        "sou_id": 7,
-        "sou_description": "HERCULES",
-        "sou_idcrm": 8
-    },
-    {
-        "sou_id": 8,
-        "sou_description": "SEGURO PARA MOVIL",
-        "sou_idcrm": 11
-    },
-    {
-        "sou_id": 9,
-        "sou_description": "CREDITEA END TO END",
-        "sou_idcrm": 13
-    },
-    {
-        "sou_id": 10,
-        "sou_description": "CREDITEA FB",
-        "sou_idcrm": 14
-    },
-    {
-        "sou_id": 11,
-        "sou_description": "CREDITEA RASTREATOR",
-        "sou_idcrm": 15
-    },
-    {
-        "sou_id": 12,
-        "sou_description": "EUSKALTEL",
-        "sou_idcrm": 16
-    },
-    {
-        "sou_id": 13,
-        "sou_description": "ADESLAS",
-        "sou_idcrm": 19
-    },
-    {
-        "sou_id": 14,
-        "sou_description": "R CABLE EMPRESAS",
-        "sou_idcrm": 20
-    },
-    {
-        "sou_id": 15,
-        "sou_description": "PRUEBA BySidecar",
-        "sou_idcrm": 23
-    },
-    {
-        "sou_id": 16,
-        "sou_description": "EVO BANCO FIRMADOS NO FORMALIZ",
-        "sou_idcrm": 24
-    },
-    {
-        "sou_id": 17,
-        "sou_description": "YOIGO NEGOCIOS DERIVACION YOIG",
-        "sou_idcrm": 25
-    },
-    {
-        "sou_id": 18,
-        "sou_description": "YOIGO NEGOCIOS SEO",
-        "sou_idcrm": 26
-    },
-    {
-        "sou_id": 19,
-        "sou_description": "YOIGO NEGOCIOS SEM",
-        "sou_idcrm": 27
-    },
-    {
-        "sou_id": 20,
-        "sou_description": "YOIGO NEGOCIOS EMAILING",
-        "sou_idcrm": 28
-    },
-    {
-        "sou_id": 21,
-        "sou_description": "CREDITEA C2C ATT. CLIENTE",
-        "sou_idcrm": 29
-    },
-    {
-        "sou_id": 22,
-        "sou_description": "CREDITEA C2C NOT STARTED",
-        "sou_idcrm": 30
-    },
-    {
-        "sou_id": 23,
-        "sou_description": "CREDITEA PAGO RECURRENTE",
-        "sou_idcrm": 31
-    },
-    {
-        "sou_id": 24,
-        "sou_description": "SANAL",
-        "sou_idcrm": 32
+        "sou_idcrm": 7,
+        "sou_test":[]        
     }
 ]

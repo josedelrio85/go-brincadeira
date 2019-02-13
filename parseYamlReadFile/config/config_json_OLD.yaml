@@ -1,0 +1,21 @@
+source: 
+  type: file
+  path: C:\Users\Jose\go\src\dev\readyamltest\testfiles\json\test_2.json
+  extension: json
+destination: 
+  type: db
+  table: webservice.sources
+  structure: 
+  structurejson: 
+   - 
+    field: sou_id
+    order: 1
+    type: int
+   - 
+    field: sou_description
+    order: 2
+    type: string
+   - 
+    field: sou_idcrm
+    order: 3
+    type: int
