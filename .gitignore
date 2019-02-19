@@ -15,5 +15,13 @@ loadFirmasExcel/*.xls
 loadFormalizadasCSV/*.exe
 loadFormalizadasCSV/*.csv
 
+loadFirmasCSV/*.csv
+loadFirmasCSV/*.exe
 
-testpurpose/
+
+
+testpurpose/*
+#testpurpose/generatedStructs/*
+
+
+blindJsonToStruct/*
