@@ -2,9 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"dev/mysqllibtest/implementeddb"
-	"dev/readparams"
-	"fmt"
+	"go_components/implementeddb"
+	"go_components/readparams"
 	"log"
 	"os"
 	"strings"
@@ -13,6 +12,7 @@ import (
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
+// ExcelRow is a struct with the structure of the excel file to analyze.
 type ExcelRow struct {
 	producto         string
 	idclienteevo     string
@@ -31,6 +31,7 @@ type ExcelRow struct {
 	tipoidentific    string
 }
 
+// Env is a struct which contains a sql.DB property
 type Env struct {
 	db *sql.DB
 }
@@ -104,7 +105,6 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 	sql := "INSERT INTO webservice.evo_firmados_sf_v2 (Producto,ID_Cliente_EVO,Fecha_de_creacion, Estado_cliente, Ultimo_punto_de_abandono, Gestion_Captacion, Numero_del_proceso_de_contratacion, Estado, Motivo_desestimacion, Numero_de_Logalty, ID_Persona_Iris, Numero_Expediente, Clase_de_Cliente, Fecha_de_firma, Tipo_de_identificacion) VALUES "
 	var sqlWhere string
 	var sqlAlt string
-	fmt.Print(sqlAlt)
 	aux := 0
 
 	for i, row := range altrows {

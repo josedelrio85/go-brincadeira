@@ -2,16 +2,17 @@ package main
 
 import (
 	"database/sql"
-	"dev/mysqllibtest/implementeddb"
-	"dev/readparams"
 	"encoding/csv"
 	"fmt"
+	"go_components/implementeddb"
+	"go_components/readparams"
 	"log"
 	"os"
 	"strings"
 	"time"
 )
 
+// Env is a struct which contains a sql.DB property
 type Env struct {
 	db *sql.DB
 }
@@ -44,7 +45,7 @@ func previoformalizadas(filename string) {
 	}
 
 	// produccion!!!!!!!!3
-	connString := readparams.GetConnString(3)
+	connString := readparams.GetConnString(1)
 	db, conerr := implementeddb.OpenConnection(connString)
 	if conerr != nil {
 		log.Println(conerr)
@@ -59,7 +60,7 @@ func previoformalizadas(filename string) {
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
-	connString = readparams.GetConnString(4)
+	connString = readparams.GetConnString(1)
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {
 		log.Println(err)
@@ -87,8 +88,6 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES %s"
 	final := make([]string, len(altrows))
-	// var finalArgs []interface{}
-	// finalArgs := make([]interface{}, 0, len(altrows))
 	finalArgs := []interface{}{}
 
 	for z, row := range altrows {
@@ -113,8 +112,8 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 	stmt, _ := db.Prepare(stmtStr)
 	_, stmterr := stmt.Exec(finalArgs...)
 	if stmterr != nil {
-		// log.Println(finalArgs)
 		log.Println(stmterr)
+		fmt.Println(stmterr)
 		return
 	}
 }
