@@ -45,7 +45,7 @@ func previoformalizadas(filename string) {
 	}
 
 	// produccion!!!!!!!!3
-	connString := readparams.GetConnString(1)
+	connString := readparams.GetConnString(3)
 	db, conerr := implementeddb.OpenConnection(connString)
 	if conerr != nil {
 		log.Println(conerr)
@@ -60,7 +60,7 @@ func previoformalizadas(filename string) {
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
-	connString = readparams.GetConnString(1)
+	connString = readparams.GetConnString(4)
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {
 		log.Println(err)
