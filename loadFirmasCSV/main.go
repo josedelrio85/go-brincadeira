@@ -44,7 +44,7 @@ func previofirmadas(filename string) {
 	}
 
 	// produccion!!!!!!!!3
-	connString := readparams.GetConnString(1)
+	connString := readparams.GetConnString(3)
 	db, conerr := implementeddb.OpenConnection(connString)
 	if conerr != nil {
 		log.Println(conerr)
@@ -59,18 +59,18 @@ func previofirmadas(filename string) {
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
-	// connString = readparams.GetConnString(1)
-	// db, err := implementeddb.OpenConnection(connString)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	log.Println(db)
-	// 	return
-	// }
+	connString = readparams.GetConnString(4)
+	db, err := implementeddb.OpenConnection(connString)
+	if err != nil {
+		log.Println(err)
+		log.Println(db)
+		return
+	}
 
-	// env = &Env{db: db}
-	// vuelcaFirmadas(env.db, rows)
+	env = &Env{db: db}
+	vuelcaFirmadas(env.db, rows)
 
-	// defer db.Close()
+	defer db.Close()
 }
 
 // ExcelRow is a struct with the structure of the excel file to analyze.
