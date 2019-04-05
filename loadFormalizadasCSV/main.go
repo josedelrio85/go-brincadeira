@@ -4,12 +4,13 @@ import (
 	"database/sql"
 	"encoding/csv"
 	"fmt"
-	"go_components/implementeddb"
-	"go_components/readparams"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/bysidecar/go_components/implementeddb"
+	"github.com/bysidecar/go_components/readparams"
 )
 
 // Env is a struct which contains a sql.DB property
