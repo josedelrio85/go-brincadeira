@@ -75,11 +75,89 @@ func previoformalizadas(filename string) {
 	defer db.Close()
 }
 
+type excelRow struct {
+	nombre                    string
+	clientid                  string
+	numeroprocesocontratacion string
+	producto                  string
+	numeroexpediente          string
+	idpersonairis             string
+	origenpromocion           string
+	fechaformalizacion        time.Time
+}
+
 func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	altrows := rows[1:]
 
-	// sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2018-12-01';"
+	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
+	_, err := db.Query(sqlTruncate)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES "
+	sqlFinal := ""
+
+	splits := 10
+	chunkSize := (len(altrows) + splits - 1) / splits
+
+	for i := 0; i < len(altrows); i += chunkSize {
+		end := i + chunkSize
+
+		if end > len(altrows) {
+			end = len(altrows)
+		}
+		subrows := altrows[i:end]
+		sqlWhere := ""
+
+		for _, row := range subrows {
+			r := strings.Split(row[0], ";")
+
+			t, timerr := time.Parse("02/01/2006 15:04", strings.Trim(r[7], " "))
+			if timerr != nil {
+				log.Println(timerr)
+				log.Println(t)
+				return
+			}
+
+			data := excelRow{
+				nombre:                    r[0],
+				clientid:                  r[1],
+				numeroprocesocontratacion: r[2],
+				producto:                  r[3],
+				numeroexpediente:          r[4],
+				idpersonairis:             r[5],
+				origenpromocion:           r[6],
+				fechaformalizacion:        t,
+			}
+
+			a := " ('" + data.nombre + "','" + data.clientid + "', '" + data.numeroprocesocontratacion + "', '" + data.producto + "', '" + data.numeroexpediente + "', '" + data.idpersonairis + "', '" + data.origenpromocion + "', '" + data.fechaformalizacion.Format("2006-01-02") + "'), "
+			sqlWhere += a
+		}
+
+		if sqlWhere != "" {
+			sqlWhere = strings.TrimSuffix(sqlWhere, ", ")
+			sqlFinal = sql + sqlWhere + " ; "
+
+			_, err = db.Query(sqlFinal)
+			if err != nil {
+				log.Println(err)
+				log.Println(sqlFinal)
+				return
+			}
+			sqlWhere = ""
+			sqlFinal = ""
+		}
+	}
+}
+
+// When the array to proccess has more than 8191 rows, the proccess fails, generating panic: runtime error: invalid memory address or nil pointer dereference
+// reason ?????????????
+func vuelcaFormalizadasWithPreparedStatement(db *sql.DB, rows [][]string) {
+
+	altrows := rows[1:]
+
 	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
 	_, err := db.Query(sqlTruncate)
 	if err != nil {
@@ -87,7 +165,7 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 		return
 	}
 
-	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES %s"
+	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES %s "
 	final := make([]string, len(altrows))
 	finalArgs := []interface{}{}
 
