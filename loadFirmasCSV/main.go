@@ -3,8 +3,11 @@ package main
 import (
 	"database/sql"
 	"encoding/csv"
+	"flag"
+	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 	"time"
 
@@ -18,7 +21,13 @@ type Env struct {
 }
 
 func main() {
-	f, err := os.OpenFile("../loadFirmasCSV_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\loadFirmasCSV", "path to read the posted file")
+	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
+	flag.Parse()
+
+	f, err := os.OpenFile("../loadFirmasCSV_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
@@ -26,12 +35,14 @@ func main() {
 
 	log.SetOutput(f)
 
-	previofirmadas("firmas.csv")
+	previofirmadas("firmas.csv", *basepath, *fileconfig)
 }
 
-func previofirmadas(filename string) {
+func previofirmadas(file string, basepath string, fileconfig string) {
 
-	filecsv, ferr := os.Open(filename)
+	filepath := path.Join(basepath, file)
+
+	filecsv, ferr := os.Open(filepath)
 	if ferr != nil {
 		log.Println(ferr)
 		return
@@ -45,7 +56,7 @@ func previofirmadas(filename string) {
 	}
 
 	// produccion!!!!!!!!3
-	connString := readparams.GetConnString(3)
+	connString := readparams.GetConnString(3, fileconfig)
 	db, conerr := implementeddb.OpenConnection(connString)
 	if conerr != nil {
 		log.Println(conerr)
@@ -60,7 +71,7 @@ func previofirmadas(filename string) {
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
-	connString = readparams.GetConnString(4)
+	connString = readparams.GetConnString(4, fileconfig)
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {
 		log.Println(err)
@@ -70,7 +81,8 @@ func previofirmadas(filename string) {
 
 	env = &Env{db: db}
 	vuelcaFirmadas(env.db, rows)
-
+	num := cuentaVolcadas(env.db)
+	fmt.Println(num)
 	defer db.Close()
 }
 
@@ -119,13 +131,15 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 		subrows := altrows[i:end]
 		sqlWhere := ""
 
-		for _, row := range subrows {
+		for z, row := range subrows {
 			r := strings.Split(row[0], ";")
 
 			t, timerr := time.Parse("02/01/2006", r[2])
 			t2, timerr := time.Parse("02/01/2006", r[13])
 
 			if timerr != nil {
+				log.Println(z)
+				log.Println(row)
 				log.Println(timerr)
 				log.Println(t)
 				return
@@ -167,4 +181,23 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 			sqlFinal = ""
 		}
 	}
+}
+
+func cuentaVolcadas(db *sql.DB) (count int) {
+	sql := "select count(*) as count from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
+
+	rows, err := db.Query(sql)
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			log.Println(err)
+			return 0
+		}
+	}
+	return count
 }

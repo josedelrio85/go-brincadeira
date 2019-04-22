@@ -3,9 +3,11 @@ package main
 import (
 	"database/sql"
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 	"time"
 
@@ -19,6 +21,11 @@ type Env struct {
 }
 
 func main() {
+
+	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\loadFormalizadasCSV", "path to read the posted file")
+	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
+	flag.Parse()
+
 	f, err := os.OpenFile("../loadFormalizadasCSV_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -27,12 +34,14 @@ func main() {
 
 	log.SetOutput(f)
 
-	previoformalizadas("formalizadas.csv")
+	previoformalizadas("formalizadas.csv", *basepath, *fileconfig)
 }
 
-func previoformalizadas(filename string) {
+func previoformalizadas(file string, basepath string, fileconfig string) {
 
-	filecsv, ferr := os.Open(filename)
+	filepath := path.Join(basepath, file)
+
+	filecsv, ferr := os.Open(filepath)
 	if ferr != nil {
 		log.Println(ferr)
 		return
@@ -46,7 +55,7 @@ func previoformalizadas(filename string) {
 	}
 
 	// produccion!!!!!!!!3
-	connString := readparams.GetConnString(3)
+	connString := readparams.GetConnString(3, fileconfig)
 	db, conerr := implementeddb.OpenConnection(connString)
 	if conerr != nil {
 		log.Println(conerr)
@@ -61,7 +70,7 @@ func previoformalizadas(filename string) {
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
-	connString = readparams.GetConnString(4)
+	connString = readparams.GetConnString(4, fileconfig)
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {
 		log.Println(err)
@@ -71,7 +80,8 @@ func previoformalizadas(filename string) {
 
 	env = &Env{db: db}
 	vuelcaFormalizadas(env.db, rows)
-
+	num := cuentaVolcadas(env.db)
+	fmt.Println(num)
 	defer db.Close()
 }
 
@@ -150,6 +160,25 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 			sqlFinal = ""
 		}
 	}
+}
+
+func cuentaVolcadas(db *sql.DB) (count int) {
+	sql := "select count(*) as count from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
+
+	rows, err := db.Query(sql)
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			log.Println(err)
+			return 0
+		}
+	}
+	return count
 }
 
 // When the array to proccess has more than 8191 rows, the proccess fails, generating panic: runtime error: invalid memory address or nil pointer dereference
