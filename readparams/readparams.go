@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 )
 
 type dbParams struct {
@@ -38,14 +39,15 @@ type dbParams struct {
 	} `json:"report_panel"`
 }
 
-func getDbParams() dbParams {
+func getDbParams(fileconfig string) dbParams {
 	var dbparams dbParams
+	fileconfig = path.Join(fileconfig, "config.development.json")
 
-	file, err := os.Open("../config.development.json")
+	file, err := os.Open(fileconfig)
 	if err != nil {
+		fmt.Println(err)
 		return dbparams
 	}
-	// fmt.Println("Successfully Opened config.development.json")
 
 	defer file.Close()
 
@@ -59,9 +61,9 @@ func getDbParams() dbParams {
 }
 
 // GetConnString returns connstring for development enviroment (report_panel && webservice)
-func GetConnString(conNumber int) string {
+func GetConnString(conNumber int, fileconfig string) string {
 
-	params := getDbParams()
+	params := getDbParams(fileconfig)
 	switch conNumber {
 	case 1:
 		return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", params.ReportPanelDev[0].User, params.ReportPanelDev[0].Password, params.ReportPanelDev[0].Host, params.ReportPanelDev[0].Port, params.ReportPanelDev[0].Db)
