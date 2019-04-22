@@ -6,24 +6,15 @@ loadFormalizadasCSV_log
 *.xlsx
 *.xls
 
-#any exe file in loadFirmasExcel folder
-loadFirmasExcel/*.exe
-loadFirmasExcel/*.xlsx
-loadFirmasExcel/*.xls
 
-
-loadFormalizadasCSV/*.exe
 loadFormalizadasCSV/*.csv
+loadFormalizadasCSV/loadFormalizadasCSV
 
 loadFirmasCSV/*.csv
-loadFirmasCSV/*.exe
+loadFirmasCSV/loadFirmasCSV
 
 
 
-testpurpose/*
-#testpurpose/generatedStructs/*
-
-
-blindJsonToStruct/*
+test/*
 
 /bysidecar.code-workspace
