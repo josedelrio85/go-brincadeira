@@ -2,8 +2,9 @@ package models
 
 import (
 	"database/sql"
-	"dev/mysqllibtest/functions"
-	"dev/mysqllibtest/implementeddb"
+
+	"github.com/bysidecar/go_components/mysqllibtest/functions"
+	"github.com/bysidecar/go_components/mysqllibtest/implementeddb"
 )
 
 type Sources struct {
