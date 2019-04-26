@@ -186,7 +186,7 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 		stmt, _ := db.Prepare(stmtStr)
 		_, stmterr := stmt.Exec(finalArgs...)
 		if stmterr != nil {
-			fmt.Println(stmterr)
+			log.Println(stmterr)
 			return
 		}
 		defer stmt.Close()
