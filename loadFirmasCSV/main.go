@@ -68,6 +68,8 @@ func previofirmadas(file string, basepath string, fileconfig string) {
 
 	//WEBSERVICE PRODUCCIÓN
 	vuelcaFirmadas(env.db, rows)
+	num := cuentaVolcadas(env.db)
+	fmt.Println(num)
 	defer db.Close()
 
 	// report_panel WEBSERVICE!!!!!!!!4
@@ -75,14 +77,11 @@ func previofirmadas(file string, basepath string, fileconfig string) {
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {
 		log.Println(err)
-		log.Println(db)
 		return
 	}
 
 	env = &Env{db: db}
 	vuelcaFirmadas(env.db, rows)
-	num := cuentaVolcadas(env.db)
-	fmt.Println(num)
 	defer db.Close()
 }
 
@@ -105,45 +104,64 @@ type ExcelRow struct {
 	tipoidentific    string
 }
 
+func cuentaVolcadas(db *sql.DB) (count int) {
+	sql := "select count(*) as count from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
+
+	rows, err := db.Query(sql)
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
+
+	for rows.Next() {
+		if err := rows.Scan(&count); err != nil {
+			log.Println(err)
+			return 0
+		}
+	}
+	return count
+}
+
 func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 
 	altrows := rows[1:]
 
 	sqlTruncate := "delete from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
-	_, err := db.Query(sqlTruncate)
-	if err != nil {
+	if _, err := db.Query(sqlTruncate); err != nil {
 		log.Println(err)
 		return
 	}
 
-	sql := "INSERT INTO webservice.evo_firmados_sf_v2 (Producto,ID_Cliente_EVO,Fecha_de_creacion, Estado_cliente, Ultimo_punto_de_abandono, Gestion_Captacion, Numero_del_proceso_de_contratacion, Estado, Motivo_desestimacion, Numero_de_Logalty, ID_Persona_Iris, Numero_Expediente, Clase_de_Cliente, Fecha_de_firma, Tipo_de_identificacion) VALUES "
-	sqlFinal := ""
+	sql := "INSERT INTO webservice.evo_firmados_sf_v2 (Producto,ID_Cliente_EVO,Fecha_de_creacion, Estado_cliente, Ultimo_punto_de_abandono, Gestion_Captacion, Numero_del_proceso_de_contratacion, Estado, Motivo_desestimacion, Numero_de_Logalty, ID_Persona_Iris, Numero_Expediente, Clase_de_Cliente, Fecha_de_firma, Tipo_de_identificacion) VALUES %s "
 
 	splits := 10
 	chunkSize := (len(altrows) + splits - 1) / splits
 
 	for i := 0; i < len(altrows); i += chunkSize {
 		end := i + chunkSize
-
 		if end > len(altrows) {
 			end = len(altrows)
 		}
+
 		subrows := altrows[i:end]
-		sqlWhere := ""
+		final := make([]string, len(subrows))
+		finalArgs := []interface{}{}
 
 		for z, row := range subrows {
 			r := strings.Split(row[0], ";")
-
 			t, timerr := time.Parse("02/01/2006", r[2])
 			t2, timerr := time.Parse("02/01/2006", r[13])
-
 			if timerr != nil {
-				log.Println(z)
-				log.Println(row)
 				log.Println(timerr)
-				log.Println(t)
 				return
 			}
+
+			tam := len(r)
+			valueStrings := make([]string, 0, tam)
+			for i := 0; i < tam; i++ {
+				valueStrings = append(valueStrings, "?")
+			}
+			final[z] = "(" + strings.TrimSuffix(strings.Join(valueStrings, ","), ",") + ")"
 
 			data := ExcelRow{
 				producto:         r[0],
@@ -163,41 +181,35 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 				tipoidentific:    r[14],
 			}
 
-			a := " ('" + data.producto + "','" + data.idclienteevo + "', '" + data.fechacreacion.Format("2006-01-02") + "', '" + data.estado + "', '" + data.ultimopunto + "', '" + data.gestioncaptacion + "', '" + data.numerocaso + "', '" + data.estadoalt + "', '" + data.motivodes + "', '" + data.numerologalty + "', '" + data.idpersonairis + "', '" + data.numeroexp + "', '" + data.clasecliente + "', '" + data.fechafirma.Format("2006-01-02") + "', '" + data.tipoidentific + "'), "
-			sqlWhere += a
+			finalArgs = append(
+				finalArgs,
+				data.producto,
+				data.idclienteevo,
+				data.fechacreacion.Format("2006-01-02"),
+				data.estado,
+				data.ultimopunto,
+				data.gestioncaptacion,
+				data.numerocaso,
+				data.estadoalt,
+				data.motivodes,
+				data.numerologalty,
+				data.idpersonairis,
+				data.numeroexp,
+				data.clasecliente,
+				data.fechafirma.Format("2006-01-02"),
+				data.tipoidentific,
+			)
 		}
 
-		if sqlWhere != "" {
-			sqlWhere = strings.TrimSuffix(sqlWhere, ", ")
-			sqlFinal = sql + sqlWhere + " ; "
+		stmtStr := fmt.Sprintf(sql, strings.Join(final, ","))
 
-			_, err = db.Query(sqlFinal)
-			if err != nil {
-				log.Println(err)
-				log.Println(sqlFinal)
-				return
-			}
-			sqlWhere = ""
-			sqlFinal = ""
+		stmt, _ := db.Prepare(stmtStr)
+		if _, stmterr := stmt.Exec(finalArgs...); stmterr != nil {
+			log.Println(stmterr)
+			return
 		}
+		defer stmt.Close()
+		// reset finalArgs
+		finalArgs = nil
 	}
-}
-
-func cuentaVolcadas(db *sql.DB) (count int) {
-	sql := "select count(*) as count from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
-
-	rows, err := db.Query(sql)
-	if err != nil {
-		log.Println(err)
-		return 0
-	}
-
-	for rows.Next() {
-		err := rows.Scan(&count)
-		if err != nil {
-			log.Println(err)
-			return 0
-		}
-	}
-	return count
 }
