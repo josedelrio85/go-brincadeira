@@ -16,15 +16,15 @@ func main() {
 	var typeload = flag.String("typeload", "1", "type of data load. 1 => from db; 2=> from csv file")
 	flag.Parse()
 
-	f, err := os.OpenFile("../nivoriacomp_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+	f, err := os.OpenFile("./nivoriacomp_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
 	defer f.Close()
 	log.SetOutput(f)
 
-	// dev => change for 1
-	connstr := readparams.GetConnString(2, *fileconfig)
+	// prod 3 dev 2
+	connstr := readparams.GetConnString(3, *fileconfig)
 	wsmsql := &nivoriacomp.Wsmsql{
 		Connstring: connstr,
 	}
