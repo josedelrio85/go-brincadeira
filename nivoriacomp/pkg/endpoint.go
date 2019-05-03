@@ -4,9 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -45,7 +43,6 @@ func (xe *XMLEntity) Request(data []Inputdata) error {
 
 		json, err := json.Marshal(xe.Jdata)
 		if err != nil {
-			log.Println(err)
 			return err
 		}
 
@@ -53,7 +50,6 @@ func (xe *XMLEntity) Request(data []Inputdata) error {
 
 		resp, err := http.Post(url, "application/json", bytes.NewBuffer(json))
 		if err != nil {
-			log.Println(err)
 			return err
 		}
 		defer resp.Body.Close()
@@ -64,13 +60,11 @@ func (xe *XMLEntity) Request(data []Inputdata) error {
 
 		data, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println(err)
 			return err
 		}
 
 		var xmlResult Xmlstruct
 		if err := xml.Unmarshal(data, &xmlResult); err != nil {
-			fmt.Println(err)
 			return err
 		}
 

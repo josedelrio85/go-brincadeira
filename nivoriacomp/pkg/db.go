@@ -3,7 +3,6 @@ package nivoriacomp
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 	"time"
@@ -30,7 +29,6 @@ func (w *Wsmsql) Open() error {
 
 	db, err := sql.Open("mysql", w.Connstring)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
@@ -64,7 +62,6 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 			// t, timerr := time.Parse("2006-01-02 15:04", r.CreDate)
 			t, timerr := time.Parse("2006-01-02 15:04:05", r.CreDate)
 			if timerr != nil {
-				log.Println(t)
 				return timerr
 			}
 
@@ -90,7 +87,6 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 
 		stmt, _ := w.db.Prepare(stmtstr)
 		if _, stmterr := stmt.Exec(finalargs...); stmterr != nil {
-			log.Println(stmterr)
 			return stmterr
 		}
 		defer stmt.Close()
@@ -105,19 +101,18 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 func (w *Wsmsql) SelectForRequest() ([]Inputdata, error) {
 	yesterday := time.Now().Add(time.Duration(-24) * time.Hour)
 	sqlselect := fmt.Sprintf(`select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro 
-	where date(CREATEDDATE) = ? limit 10;`)
+	where date(CREATEDDATE) = ?;`)
 
 	stmt, _ := w.db.Prepare(sqlselect)
 	rows, stmterr := stmt.Query(yesterday.Format("2006-01-02"))
 	if stmterr != nil {
-		log.Println(stmterr)
 		return nil, stmterr
 	}
 	importer := Importer{}
 	inputdata := Inputdata{}
+
 	for rows.Next() {
 		if err := rows.Scan(&inputdata.Clientid, &inputdata.Createddate); err != nil {
-			log.Println(err)
 			return nil, err
 		}
 		importer.Data = append(importer.Data, inputdata)

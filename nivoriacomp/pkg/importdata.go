@@ -2,7 +2,6 @@ package nivoriacomp
 
 import (
 	"encoding/csv"
-	"log"
 	"os"
 	"strings"
 )
@@ -26,14 +25,12 @@ type Inputdata struct {
 func (a *Importer) Importfromcsv() error {
 	filecsv, err := os.Open(a.Path)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	defer filecsv.Close()
 
 	data, err := csv.NewReader(filecsv).ReadAll()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
@@ -54,7 +51,6 @@ func (a *Importer) Importfromcsv() error {
 func (a *Importer) Importfromdb() error {
 	data, err := a.Storer.SelectForRequest()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	a.Data = data
