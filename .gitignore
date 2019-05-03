@@ -13,8 +13,8 @@ loadFormalizadasCSV/loadFormalizadasCSV
 loadFirmasCSV/*.csv
 loadFirmasCSV/loadFirmasCSV
 
-/nivoriacomp/*.csv
-/nivoriacomp/nivoriacomp_log
+nivoriacomp/*.csv
+nivoriacomp/nivoriacomp_log
 
 test/*
 
