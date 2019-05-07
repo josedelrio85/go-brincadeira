@@ -71,9 +71,7 @@ func (xe *XMLEntity) Request(data []Inputdata) error {
 		if (Xmlstruct{}) == xmlResult {
 			xmlResult.Idsf = xe.Jdata.Ide
 		}
-		// if xmlResult.Stepid.Name != dat.Stepid {
-		// 	xmlResult.Stepid.Name = dat.Stepid
-		// }
+
 		xmlResult.CreDate = dat.Createddate
 		xe.Xdata = append(xe.Xdata, xmlResult)
 	}
