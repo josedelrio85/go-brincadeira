@@ -17,5 +17,6 @@ nivoriacomp/*.csv
 nivoriacomp/nivoriacomp_log
 
 test/*
+exercise/*
 
 /bysidecar.code-workspace
