@@ -15,6 +15,7 @@ loadFirmasCSV/loadFirmasCSV
 
 nivoriacomp/*.csv
 nivoriacomp/nivoriacomp_log
+nivoriacomp/nivoriacomp
 
 test/*
 exercise/*
