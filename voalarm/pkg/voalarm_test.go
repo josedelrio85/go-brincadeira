@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSimple(t *testing.T) {
+func TestEndpoint(t *testing.T) {
 	assert := assert.New(t)
 
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
@@ -71,20 +71,6 @@ func TestSimple(t *testing.T) {
 				StateStartTime:    time.Now().Format("2006-01-02 15:04:05"),
 			},
 		},
-		{
-			Description:    "Post method with content-type and malformed parameters",
-			ExpectedStatus: http.StatusInternalServerError,
-			TypeRequest:    http.MethodPost,
-			Contentype:     "application/json",
-			Params: Alarm{
-				// MessageType:       Acknowledgement,
-				EntityState:       Acknowledgement,
-				EntityID:          "go! exception",
-				EntityDisplayName: "go! exception",
-				StateMessage:      "hola",
-				StateStartTime:    time.Now().Format("2006-01-02 15:04:05"),
-			},
-		},
 	}
 
 	for _, test := range tests {
@@ -105,5 +91,39 @@ func TestSimple(t *testing.T) {
 
 		assert.NoError(err)
 		assert.Equal(test.ExpectedStatus, resp.StatusCode)
+	}
+}
+
+func TestClient(t *testing.T) {
+	assert := assert.New(t)
+
+	tests := []struct {
+		Description string
+		APIKey string
+		ExpectedAPIKey string
+		ExpectedResult bool
+	}{
+		{
+			Description: "bad API Key provided, NewClient function works but an error will throw when sendAlarm is invoked",
+			APIKey: "test-api-key",
+			ExpectedAPIKey: "2f616629-de63-4162-bb6f-11966bbb538d/test",
+			ExpectedResult: false,
+		},
+		{
+			Description: "no APIKey provided, NewClient function should set correct API Key",
+			APIKey: "",
+			ExpectedAPIKey: "2f616629-de63-4162-bb6f-11966bbb538d/test",
+			ExpectedResult: true,
+		},
+	}
+
+
+	for _, test := range tests {
+		client := NewClient(test.APIKey)
+		if test.ExpectedResult {
+			assert.Equal(client.APIkey, test.ExpectedAPIKey)
+		}else{
+			assert.NotEqual(client.APIkey, test.ExpectedAPIKey)
+		}		
 	}
 }
