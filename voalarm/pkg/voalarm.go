@@ -9,12 +9,7 @@ import (
 	"time"
 )
 
-// PruebaInterface blalblasdfa
-type PruebaInterface interface {
-	SendAlarm(MessageType, error) (*Response, error)
-}
-
-// TestAlarm asdñfkljasdñf
+// TestAlarm is a struct to define the structure blablabla
 type TestAlarm struct {
 	Resp *Response
 	Err  error
@@ -25,8 +20,11 @@ func (c TestAlarm) SendAlarm(ms MessageType, err error) (*Response, error) {
 	return c.Resp, c.Err
 }
 
-// API represents the main parameters to generate an alarm in VictorOps plattform
-type API struct {
+
+
+
+// Client represents the main parameters to generate an alarm in VictorOps plattform
+type Client struct {
 	Endpoint string
 	APIkey   string
 }
@@ -63,21 +61,24 @@ const (
 )
 
 // NewClient is a method to instantiate an API object setting the main parameters
-func NewClient(apikey string) *API {
-	api := &API{
+func NewClient(apikey string) *Client {
+	if len(apikey) == 0 {
+		apikey = "2f616629-de63-4162-bb6f-11966bbb538d/test"
+	}
+
+	client := &Client{
 		APIkey:   apikey,
 		Endpoint: "https://alert.victorops.com/integrations/generic/20131114/alert",
 	}
-	return api
+	return client
 }
 
 // SendAlarm is the main method to generate an alarm.
 // Needs a MessageType parameter and the error that we need to log.
 // Returns the response of VictorOps plattform and nil if success
-func (a *API) SendAlarm(ms MessageType, err error) (*Response, error) {
-	if a.APIkey == "" {
-		a.APIkey = "2f616629-de63-4162-bb6f-11966bbb538d/test"
-		a.Endpoint = "https://alert.victorops.com/integrations/generic/20131114/alert"
+func (a *Client) SendAlarm(ms MessageType, err error) (*Response, error) {
+	if len(a.APIkey) == 0 || len(a.Endpoint) == 0 {
+		a = NewClient("")
 	}
 
 	alarm := Alarm{
