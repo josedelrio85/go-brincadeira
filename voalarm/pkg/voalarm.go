@@ -9,20 +9,6 @@ import (
 	"time"
 )
 
-// TestAlarm is a struct to define the structure blablabla
-type TestAlarm struct {
-	Resp *Response
-	Err  error
-}
-
-// SendAlarm asdñfkljasdñf
-func (c TestAlarm) SendAlarm(ms MessageType, err error) (*Response, error) {
-	return c.Resp, c.Err
-}
-
-
-
-
 // Client represents the main parameters to generate an alarm in VictorOps plattform
 type Client struct {
 	Endpoint string
