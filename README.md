@@ -32,3 +32,28 @@ Use the following statement to check that the import procedure has succeeded, yo
 ```
 SELECT * FROM webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01' order by Fecha_de_firma desc limit 10;
 ```
+
+
+## voalarm
+
+This functionality can send an alarm to VictorOps plattform when an execption occurs. 
+
+```
+  // Create an instance of Client struct with no params. SendAlarm will set correct values.
+	a := fmt.Errorf("Error. Artificial error: %v", errors.New("emit macho dwarf: elf header corrupted"))
+	alarm := voalarm.Client{}
+	resp, err := alarm.SendAlarm(voalarm.Acknowledgement, a)
+	if err != nil {
+		log.Fatalf("Error creating alarm. Err: %s", err)
+	}
+	log.Printf("Response: %+v\n", resp)
+
+  // Create an instance of Client struct with apikey param setted to "". SendAlarm will set correct values too.
+  a := fmt.Errorf("Error. Artificial error: %v", errors.New("emit macho dwarf: elf header corrupted"))
+	alarm := voalarm.NewClient("")
+	resp, err := alarm.SendAlarm(voalarm.Acknowledgement, a)
+	if err != nil {
+		log.Fatalf("Error creating alarm. Err: %s", err)
+	}
+	log.Printf("Response: %+v\n", resp)
+```
