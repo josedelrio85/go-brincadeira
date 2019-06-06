@@ -57,3 +57,14 @@ This functionality can send an alarm to VictorOps plattform when an execption oc
 	}
 	log.Printf("Response: %+v\n", resp)
 ```
+
+
+## encode64
+
+This functionality encodes to base64 string an input csv file with one column of data (mainly phone numbers but will decode any string). 
+
+Returns an output csv file with two columns, the first is the input data and the second is the encoded data. 
+
+This functionality will look, by default, for an input csv file which name starts by 'input'. 
+
+You can pass an entry param --filename indicating the file name to encode.
