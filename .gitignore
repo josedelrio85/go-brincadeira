@@ -17,6 +17,9 @@ nivoriacomp/*.csv
 nivoriacomp/nivoriacomp_log
 nivoriacomp/nivoriacomp
 
+statecalllog/main
+
+
 encode64/*.csv
 
 
