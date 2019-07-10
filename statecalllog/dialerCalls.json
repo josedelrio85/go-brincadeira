@@ -1,0 +1,30 @@
+[
+    {
+        "call_status": "ONQUEUE",
+        "call_telephone": "655940675"
+    },
+    {
+        "call_status": "ONIVR",
+        "call_telephone": "665932355"
+    },
+    {
+        "call_status": "ORIGINATE",
+        "call_telephone": "659794208"
+    },
+    {
+        "call_status": "ONAGENT",
+        "call_telephone": "671333269"
+    },
+    {
+        "call_status": "CONNECTING",
+        "call_telephone": "638769068"
+    },
+    {
+        "call_status": "FINISHING",
+        "call_telephone": "610476228"
+    },
+    {
+        "call_status": "ONAGENT",
+        "call_telephone": "661455978"
+    }
+]
