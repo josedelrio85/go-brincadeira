@@ -92,3 +92,21 @@ It does not interact with the asterisk system directly. Instead it reads a json 
  ```
 ./main --seconds=15 --printall=true --basepath=/var/www/privateBySidecar/realTimeData
 ```
+
+## Nivoria
+
+  - This taks is launched every day at 02:20.
+
+  - This query is launched against our DB to get the data about CLIENTID and CREATEDDATE fields.
+
+```
+select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro    where date(CREATEDDATE) = [yesterday]
+```
+
+  - The data retrieved is stored into an array and this data is provided as param to the next endpoint (POST / JSON):
+
+```
+http://www.nivolab.com/dev/api/evo/getGoal.php
+```
+
+   - The results obtained are stored in another array and a batch insert is made into `evo_origen_idcliente` table.
