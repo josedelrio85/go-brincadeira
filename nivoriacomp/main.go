@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
@@ -24,7 +25,7 @@ func main() {
 	log.SetOutput(f)
 
 	// prod 3 dev 2
-	connstr := readparams.GetConnString(3, *fileconfig)
+	connstr := readparams.GetConnString(2, *fileconfig)
 	wsmsql := &nivoriacomp.Wsmsql{
 		Connstring: connstr,
 	}
@@ -34,16 +35,19 @@ func main() {
 	}
 
 	if err := wsmsql.Open(); err != nil {
-		log.Fatalf("error opening mysql connection. err: %s", err)
+		message := fmt.Sprintf("error opening mysql connection. err %s", err)
+		nivoriacomp.ResponseError(message, err)
 	}
 
 	if *typeload == "2" {
 		if err := importer.Importfromcsv(); err != nil {
-			log.Fatalf("error importing data. err %s", err)
+			message := fmt.Sprintf("error importing data. err %s", err)
+			nivoriacomp.ResponseError(message, err)
 		}
 	} else {
 		if err := importer.Importfromdb(); err != nil {
-			log.Fatalf("error importing data. err %s", err)
+			message := fmt.Sprintf("error importing data. err %s", err)
+			nivoriacomp.ResponseError(message, err)
 		}
 	}
 
@@ -57,10 +61,12 @@ func main() {
 	}
 
 	if err := xmlent.Request(importer.Data); err != nil {
-		log.Fatalf("error request data. err %s", err)
+		message := fmt.Sprintf("error requesting data. err %s", err)
+		nivoriacomp.ResponseError(message, err)
 	}
 
 	if err := wsmsql.BatchInsert(xmlent.Xdata); err != nil {
-		log.Fatalf("error inserting data. err %s", err)
+		message := fmt.Sprintf("error inserting data. err %s", err)
+		nivoriacomp.ResponseError(message, err)
 	}
 }
