@@ -25,7 +25,7 @@ func main() {
 	log.SetOutput(f)
 
 	// prod 3 dev 2
-	connstr := readparams.GetConnString(2, *fileconfig)
+	connstr := readparams.GetConnString(3, *fileconfig)
 	wsmsql := &nivoriacomp.Wsmsql{
 		Connstring: connstr,
 	}
