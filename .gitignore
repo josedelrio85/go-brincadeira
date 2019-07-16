@@ -15,7 +15,7 @@ loadFirmasCSV/loadFirmasCSV
 
 nivoriacomp/*.csv
 nivoriacomp/nivoriacomp_log
-nivoriacomp/nivoriacomp
+nivoriacomp/nivoriacomp*
 
 statecalllog/main
 
