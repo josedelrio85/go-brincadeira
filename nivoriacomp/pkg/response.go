@@ -13,7 +13,7 @@ func ResponseError(message string, err error) {
 	log.Fatalf(message, err)
 
 	alarm := voalarm.NewClient("")
-	alarm.SendAlarm(voalarm.Acknowledgement, err)
+	alarm.SendAlarm("nivoriacomp", voalarm.Acknowledgement, err)
 }
 
 // fancyHandleError logs the error and indicates the line and function
