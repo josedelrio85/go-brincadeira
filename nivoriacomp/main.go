@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	nivoriacomp "github.com/bysidecar/go_components/nivoriacomp/pkg"
 	"github.com/bysidecar/go_components/readparams"
@@ -69,4 +70,7 @@ func main() {
 		message := fmt.Sprintf("error inserting data. err %s", err)
 		nivoriacomp.ResponseError(message, err)
 	}
+
+	final := time.Now().Format("2006-01-02 15:04:05")
+	log.Printf("Process ended at %s", final)
 }
