@@ -134,7 +134,7 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 
 	sql := "INSERT INTO webservice.evo_firmados_sf_v2 (Producto,ID_Cliente_EVO,Fecha_de_creacion, Estado_cliente, Ultimo_punto_de_abandono, Gestion_Captacion, Numero_del_proceso_de_contratacion, Estado, Motivo_desestimacion, Numero_de_Logalty, ID_Persona_Iris, Numero_Expediente, Clase_de_Cliente, Fecha_de_firma, Tipo_de_identificacion) VALUES %s "
 
-	splits := 10
+	splits := 100
 	chunkSize := (len(altrows) + splits - 1) / splits
 
 	for i := 0; i < len(altrows); i += chunkSize {
