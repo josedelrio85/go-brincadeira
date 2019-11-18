@@ -105,7 +105,7 @@ type ExcelRow struct {
 }
 
 func cuentaVolcadas(db *sql.DB) (count int) {
-	sql := "select count(*) as count from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
+	sql := "select count(*) as count from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2019-07-01';"
 
 	rows, err := db.Query(sql)
 	if err != nil {
@@ -126,7 +126,7 @@ func vuelcaFirmadas(db *sql.DB, rows [][]string) {
 
 	altrows := rows[1:]
 
-	sqlTruncate := "delete from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01';"
+	sqlTruncate := "delete from webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2019-07-01';"
 	if _, err := db.Query(sqlTruncate); err != nil {
 		log.Println(err)
 		return

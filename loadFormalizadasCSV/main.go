@@ -97,7 +97,7 @@ type excelRow struct {
 }
 
 func cuentaVolcadas(db *sql.DB) (count int) {
-	sql := "select count(*) as count from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
+	sql := "select count(*) as count from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-07-01';"
 
 	rows, err := db.Query(sql)
 	if err != nil {
@@ -119,7 +119,7 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	altrows := rows[1:]
 
-	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01';"
+	sqlTruncate := "delete from webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-07-01';"
 	_, err := db.Query(sqlTruncate)
 	if err != nil {
 		log.Println(err)
@@ -128,7 +128,7 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 
 	sql := "INSERT INTO webservice.evo_formalizadas_sf_v2 (NOMBRE,CLIENTID,NUMERO_PROCESO_CONTRATACION,PRODUCTO,NUMERO_EXPEDIENTE,ID_PERSONA_IRIS,ORIGEN_PROMOCION,FECHA_FORMALIZACION) VALUES %s "
 
-	splits := 10
+	splits := 1000
 	chunkSize := (len(altrows) + splits - 1) / splits
 
 	for i := 0; i < len(altrows); i += chunkSize {
@@ -182,8 +182,11 @@ func vuelcaFormalizadas(db *sql.DB, rows [][]string) {
 		}
 
 		stmtStr := fmt.Sprintf(sql, strings.Join(final, ","))
-
-		stmt, _ := db.Prepare(stmtStr)
+		stmt, err := db.Prepare(stmtStr)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		_, stmterr := stmt.Exec(finalArgs...)
 		if stmterr != nil {
 			log.Println(stmterr)
