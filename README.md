@@ -112,3 +112,9 @@ select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro    where date(
 * Then an update is made to close this leads and mark it setting a text in observations2 field.
 
 * Finally an insert in his_history table is made to create the row that indicates that the lead was closed.
+
+* Instruction to automatic execute the script
+
+```bash
+20 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-evo-leads/ && ./cleanup-evo-leads -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-evo-leads.log 2>&1
+```

@@ -14,7 +14,7 @@ import (
 	"github.com/bysidecar/voalarm"
 )
 
-//Database blablabla
+//Database is a struct that represents MySQL db instance
 type Database struct {
 	db *sql.DB
 }
@@ -110,7 +110,8 @@ func main() {
 	log.Printf(`Cleanup process succeeds! [%s] Registries updated: %d`, today, count2)
 }
 
-// ExecQuery blablabla
+// ExecQuery prepares a query without parameters and execute this prepared statement
+// Returns number of elements affected or error
 func (d Database) ExecQuery(query string) (int64, error) {
 	stmt, err := d.db.Prepare(query)
 	if err != nil {
