@@ -27,7 +27,7 @@
         "port": "3306",
         "db": "report_panel"
     }],
-    "crmti_dev":[{
+    "crmti":[{
       "user": "root",
       "password": "root_bsc",
       "host": "127.0.0.1",

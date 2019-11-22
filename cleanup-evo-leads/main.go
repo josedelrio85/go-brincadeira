@@ -23,7 +23,7 @@ func main() {
 	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
 	flag.Parse()
 
-	file, err := os.OpenFile("./clenaup-evo-leads_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+	file, err := os.OpenFile("./cleanup-evo-leads_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
 	if err != nil {
 		sendAlarm(err)
 		return
@@ -32,7 +32,6 @@ func main() {
 
 	log.SetOutput(file)
 
-	// TODO set propper connection string value
 	connString := readparams.GetConnString(5, *fileconfig)
 	db, err := implementeddb.OpenConnection(connString)
 	if err != nil {

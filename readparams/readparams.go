@@ -37,13 +37,13 @@ type dbParams struct {
 		Port     string `json:"port"`
 		Db       string `json:"db"`
 	} `json:"report_panel"`
-	CrmtiDev []struct {
+	Crmti []struct {
 		User     string `json:"user"`
 		Password string `json:"password"`
 		Host     string `json:"host"`
 		Port     string `json:"port"`
 		Db       string `json:"db"`
-	} `json:"crmti_dev"`
+	} `json:"crmti"`
 }
 
 func getDbParams(fileconfig string) dbParams {
@@ -81,7 +81,7 @@ func GetConnString(conNumber int, fileconfig string) string {
 	case 4:
 		return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", params.ReportPanel[0].User, params.ReportPanel[0].Password, params.ReportPanel[0].Host, params.ReportPanel[0].Port, params.ReportPanel[0].Db)
 	case 5:
-		return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", params.CrmtiDev[0].User, params.CrmtiDev[0].Password, params.CrmtiDev[0].Host, params.CrmtiDev[0].Port, params.CrmtiDev[0].Db)
+		return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", params.Crmti[0].User, params.Crmti[0].Password, params.Crmti[0].Host, params.Crmti[0].Port, params.Crmti[0].Db)
 	}
 	return ""
 }
