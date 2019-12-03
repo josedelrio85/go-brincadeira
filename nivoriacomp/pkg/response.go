@@ -10,7 +10,6 @@ import (
 // ResponseError an alarm when an error occurs
 func ResponseError(message string, err error) {
 	fancyHandleError(err)
-	log.Fatalf(message, err)
 
 	alarm := voalarm.NewClient("")
 	alarm.SendAlarm("nivoriacomp", voalarm.Acknowledgement, err)
