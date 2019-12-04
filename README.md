@@ -16,7 +16,22 @@ Use the following statement to check that the import procedure has succeeded, yo
 ```sql
 SELECT * FROM webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) >= '2019-01-01' order by FECHA_FORMALIZACION desc limit 10;
 ```
-  
+
+* To compile as linux distribution execute:
+
+```bash
+  set GOOS=linux
+  go build
+```
+
+* Upload the compiled object to Sira host and set correct permission and owner.
+
+```bash
+/var/www/vhosts/dashboard.bysidecar.es/custom/plugins/loadFormalizadasCSV
+chown apache:apache loadFormalizadasCSV
+chmod 755 loadFormalizadasCSV
+```
+
 ## loadFirmasCSV
 
 > Requires a CSV file named "firmas.csv" downloaded form EVO's CRM on the same folder than the executable
@@ -29,6 +44,21 @@ Use the following statement to check that the import procedure has succeeded, yo
 
 ```sql
 SELECT * FROM webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-12-01' order by Fecha_de_firma desc limit 10;
+```
+
+* To compile as linux distribution execute:
+
+```bash
+  set GOOS=linux
+  go build
+```
+
+* Upload the compiled object to Sira host and set correct permission and owner.
+
+```bash
+/var/www/vhosts/dashboard.bysidecar.es/custom/plugins/loadFirmasCSV
+chown apache:apache loadFirmasCSV
+chmod 755 loadFirmasCSV
 ```
 
 ## voalarm
@@ -102,6 +132,21 @@ select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro    where date(
 <http://www.nivolab.com/dev/api/evo/getGoal.php>
 
 * The results obtained are stored in another array and a batch insert is made into `evo_origen_idcliente` table.
+
+* To compile as linux distribution execute:
+
+```bash
+  set GOOS=linux
+  go build
+```
+
+* Upload the compiled object to Webserice host and set correct permission and owner.
+
+```bash
+/etc/srv/bysidecar/bin/github.com/bysidecar/nivoriacomp/
+chown apache:apache nivoriacomp
+chmod 755 nivoriacomp
+```
 
 ## Cleanup Evo leads
 
