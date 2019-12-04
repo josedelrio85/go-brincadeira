@@ -148,6 +148,12 @@ chown apache:apache nivoriacomp
 chmod 755 nivoriacomp
 ```
 
+* Instruction to automatic execute the script
+
+```bash
+20 2 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/nivoriacomp/ && ./nivoriacomp -fileconfig=/var/www/privateBySidecar/ > /var/log/nivoriacomp.log 2>&1
+```
+
 ## Cleanup Evo leads
 
 * This taks is launched every day at 03:20.
@@ -157,6 +163,21 @@ chmod 755 nivoriacomp
 * Then an update is made to close this leads and mark it setting a text in observations2 field.
 
 * Finally an insert in his_history table is made to create the row that indicates that the lead was closed.
+
+* To compile as linux distribution execute:
+
+```bash
+  set GOOS=linux
+  go build
+```
+
+* Upload the compiled object to Webserice host and set correct permission and owner.
+
+```bash
+/etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-evo-leads/
+chown apache:apache cleanup-evo-leads
+chmod 755 cleanup-evo-leads
+```
 
 * Instruction to automatic execute the script
 
