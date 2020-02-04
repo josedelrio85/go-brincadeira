@@ -187,7 +187,7 @@ chmod 755 cleanup-evo-leads
 
 ## Cleanup Inbound R
 
-* This task is launched every day at ??:??.
+* This task is launched every day at ??:??.  [update] THIS TASK IS NOT IN PRODUCTION FINALLY
 
 * In first case, a list of ID's is retrieved from lea_leads table for R Cable Inbound campgaign to get leads that came from a tranference from Euskaltel Group.
 
