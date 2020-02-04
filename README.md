@@ -187,7 +187,7 @@ chmod 755 cleanup-evo-leads
 
 ## Cleanup Inbound R
 
-* This task is launched every day at ??:??.  [update] THIS TASK IS NOT IN PRODUCTION FINALLY
+* This task is launched every day at 03:30
 
 * In first case, a list of ID's is retrieved from lea_leads table for R Cable Inbound campgaign to get leads that came from a tranference from Euskaltel Group.
 
@@ -213,5 +213,5 @@ chmod 755 cleanup-inbound-r
 * Instruction to automatic execute the script
 
 ```bash
-20 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-inbound-r.log 2>&1
+30 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-inbound-r.log 2>&1
 ```
