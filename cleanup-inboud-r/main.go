@@ -54,11 +54,12 @@ func main() {
 	sql2 := fmt.Sprintf(`
 		CREATE TABLE crmti.inboundRClose 
 		SELECT lea_id FROM lea_leads  
-		WHERE lea_closed=0  
+		WHERE lea_closed = 1  
 		AND TELEFONO in ('881920590','946858791','946858792','946858793','946858794','946858795')
 		AND lea_source = 81
 		AND lea_type = 9 
-		AND date(lea_ts) <= date('%s');`, today)
+		AND date(lea_ts) <= date('%s')
+		AND observaciones2 is null;`, today)
 	if _, err := database.ExecQuery(sql2); err != nil {
 		sendAlarm(err)
 		return
@@ -69,7 +70,6 @@ func main() {
 
 	sql3 := fmt.Sprintf(`
 		UPDATE crmti.lea_leads SET 
-		lea_closed=1, 
 		observaciones2='CERRADO POR LIMPIEZA INBOUND R RCABLE %s' 
 		where lea_id in (select lea_id from crmti.inboundRClose);`,
 		today)
