@@ -156,7 +156,7 @@ chmod 755 nivoriacomp
 
 ## Cleanup Evo leads
 
-* This taks is launched every day at 03:20.
+* This task is launched every day at 03:20.
 
 * First a list of ID's is retrieved from lea_leads table for Evo campaign to get leads that were auto assigned to consultants.
 
@@ -183,4 +183,35 @@ chmod 755 cleanup-evo-leads
 
 ```bash
 20 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-evo-leads/ && ./cleanup-evo-leads -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-evo-leads.log 2>&1
+```
+
+## Cleanup Inbound R
+
+* This task is launched every day at ??:??.
+
+* In first case, a list of ID's is retrieved from lea_leads table for R Cable Inbound campgaign to get leads that came from a tranference from Euskaltel Group.
+
+* Then an update is made to close this leads and mark it setting a text in observations2 field.
+
+* Finally an insert in his_history table is made to create the row that indicates that the lead was closed.
+
+* To compile as linux distribution execute:
+
+```bash
+  set GOOS=linux
+  go build
+```
+
+* Upload the compiled object to Webserice host and set correct permission and owner.
+
+```bash
+/etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/
+chown apache:apache cleanup-inbound-r
+chmod 755 cleanup-inbound-r
+```
+
+* Instruction to automatic execute the script
+
+```bash
+20 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-inbound-r.log 2>&1
 ```
