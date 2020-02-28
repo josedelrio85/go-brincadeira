@@ -54,7 +54,7 @@ func main() {
 	sql2 := fmt.Sprintf(`
 		CREATE TABLE crmti.inboundRClose 
 		SELECT lea_id FROM lea_leads  
-		WHERE lea_closed = 1  
+		WHERE lea_closed = 0  
 		AND TELEFONO in ('881920590','946858791','946858792','946858793','946858794','946858795')
 		AND lea_source = 81
 		AND lea_type = 9 
