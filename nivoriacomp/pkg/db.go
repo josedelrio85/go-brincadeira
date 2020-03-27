@@ -59,7 +59,6 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 
 		for z, row := range subrows {
 			r := row
-			// t, timerr := time.Parse("2006-01-02 15:04", r.CreDate)
 			t, timerr := time.Parse("2006-01-02 15:04:05", r.CreDate)
 			if timerr != nil {
 				return timerr
@@ -101,10 +100,11 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 func (w *Wsmsql) SelectForRequest() ([]Inputdata, error) {
 	yesterday := time.Now().Add(time.Duration(-24) * time.Hour)
 	sqlselect := fmt.Sprintf(`select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro 
-	where date(CREATEDDATE) = ?;`)
+	where date(CREATEDDATE) = ? group by CLIENTID;`)
 
 	stmt, _ := w.db.Prepare(sqlselect)
 	rows, stmterr := stmt.Query(yesterday.Format("2006-01-02"))
+	// rows, stmterr := stmt.Query("2020-03-19")
 	if stmterr != nil {
 		return nil, stmterr
 	}
