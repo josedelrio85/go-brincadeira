@@ -104,7 +104,7 @@ func (w *Wsmsql) SelectForRequest() ([]Inputdata, error) {
 
 	stmt, _ := w.db.Prepare(sqlselect)
 	rows, stmterr := stmt.Query(yesterday.Format("2006-01-02"))
-	// rows, stmterr := stmt.Query("2020-03-19")
+	// rows, stmterr := stmt.Query("2020-05-18")
 	if stmterr != nil {
 		return nil, stmterr
 	}
