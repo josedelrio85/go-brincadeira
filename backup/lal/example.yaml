@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  symfony2:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+    environment:
+      APP_ENV: dev
+    ports:
+      - 8005:80
+    volumes:
+      - ./symfony/:/app/symfony/
+    networks:
+      - symfony
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7.14
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-authentication-plugin=mysql_native_password', '--sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION']
+    environment:
+      MYSQL_ROOT_PASSWORD: root_bsc
+      MYSQL_DATABASE: capsacatalogo
+    ports:
+      - 3309:3306
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+    networks:
+      - symfony
+networks:
+  symfony:
