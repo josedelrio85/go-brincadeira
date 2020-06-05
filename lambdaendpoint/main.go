@@ -20,7 +20,6 @@ func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 	for _, record := range s3Event.Records {
 		s3 := record.S3
 		fmt.Printf("[%s - %s] Bucket = %s, Key = %s \n", record.EventSource, record.EventTime, s3.Bucket.Name, s3.Object.Key)
-		// [aws:s3 - 2020-06-04 16:39:32.205 +0000 UTC] Bucket = data.bysidecar.me, Key = backups/ws/2020-13-23.sql.gz
 		path := strings.Split(s3.Object.Key, "/")
 
 		for _, p := range path {
