@@ -1,0 +1,45 @@
+act_activity  => [act_id, act_ts]
+cat_categories  => []
+cli_clients  => []
+dni_dnis  => []
+his_history  => [his_id, his_ts]
+lea_leads  => [lea_id, lea_ts]
+ord_lines  => []
+ord_orders  => []
+pro_products  => []
+ope_operation
+que_queues  => []
+que_queues_description  => []
+rel_gro_usr  => []
+rel_pro_cat	 => []
+rel_pro_groups => []
+rel_prof_gro  => []
+rel_prof_sub  => []
+rel_que_sub  => []
+rel_rep_usr  => []
+rel_sal_pro  => []
+rel_sou_sub  => []
+sou_sources  => []
+sub_subcategories  => []
+typ_types  => []
+user_log  => []
+usr_users  => [user_ts_in, user_ts_out]
+
+
+/usr/local/mysql/bin/mysqldump -h [remoteip] --port = 3306 -u [username] -p [password] --databases [db_name] --tables [tablename] > /to/path/tablename.sql;
+
+mysqldump -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases crmti --tables act_activity --where="date(act_ts) >= '2020-01-01'"  cat_categories > test.sql
+
+mysqldump -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases crmti --tables cat_categories cli_clients dni_dnis ord_lines ord_orders ope_operation pro_products que_queues que_queues_description rel_gro_usr rel_pro_cat rel_pro_groups rel_prof_gro rel_prof_sub rel_que_sub rel_rep_usr rel_sal_pro rel_sou_sub sou_sources sub_subcategories typ_types user_log > test.sql
+
+
+[with large tables]
+mysqldump -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases crmti --tables cat_categories cli_clients dni_dnis ord_lines ord_orders pro_products que_queues que_queues_description rel_gro_usr rel_pro_cat rel_pro_groups rel_prof_gro rel_prof_sub rel_que_sub rel_rep_usr rel_sal_pro rel_sou_sub sou_sources sub_subcategories typ_types user_log act_activity his_history lea_leads usr_users > test.sql
+          -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases crmti --tables cat_categories cli_clients dni_dnis ord_lines ord_orders pro_products que_queues que_queues_description rel_gro_usr rel_pro_cat rel_pro_groups rel_prof_gro rel_prof_sub rel_que_sub rel_rep_usr rel_sal_pro rel_sou_sub sou_sources sub_subcategories typ_types user_log act_activity his_history lea_leads usr_users
+          -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases crmti --tables cat_categories cli_clients dni_dnis ord_lines ord_orders pro_products que_queues que_queues_description rel_gro_usr rel_pro_cat rel_pro_groups rel_prof_gro rel_prof_sub rel_que_sub rel_rep_usr rel_sal_pro rel_sou_sub sou_sources sub_subcategories typ_types user_log act_activity his_history lea_leads usr_users
+
+# asterisk
+
+mysqldump -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases asterisk --tables ast_cdr --where="date(calldate) >= '2020-01-01'" > ast_cdr.sql
+
+mysqldump -h127.0.0.1 -uroot -proot_bsc -P 3306 -f --databases asterisk --tables tel_queue_activity --where="date(tel_queue_act_ts) >= '2020-01-01'" > tel_queue_activity.sql
