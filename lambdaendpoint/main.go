@@ -26,13 +26,16 @@ func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 			fmt.Println(p)
 		}
 
-		endpoint := fmt.Sprintf("https://algo.bysidecar.me/import/%s", path[1])
-
 		payload := struct {
-			Name string `json:"name"`
+			Bucket string `json:"bucket"`
+			Name   string `json:"name"`
+			Test   bool   `json:"test"`
 		}{
-			Name: path[2],
+			Bucket: path[1],
+			Name:   path[2],
 		}
+
+		endpoint := fmt.Sprintf("https://algo.bysidecar.me/import/%s", payload.Bucket)
 
 		bytevalues, err := json.Marshal(payload)
 		if err != nil {
