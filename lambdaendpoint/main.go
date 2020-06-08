@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -18,13 +15,6 @@ import (
 // HandleRequest is
 func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 
-	payload := struct {
-		Bucket      string `json:"bucket"`
-		Name        string `json:"name"`
-		Test        bool   `json:"test"`
-		PrincipalID string `json:"id"`
-	}{}
-
 	for _, record := range s3Event.Records {
 		s3 := record.S3
 		fmt.Printf("[%s - %s] ID: %s Bucket = %s, Key = %s \n", record.EventSource, record.EventTime, record.PrincipalID.PrincipalID, s3.Bucket.Name, s3.Object.Key)
@@ -33,37 +23,38 @@ func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 		for _, p := range path {
 			fmt.Println(p)
 		}
+		principal := strings.Split(record.PrincipalID.PrincipalID, ":")
 
-		payload.Bucket = path[1]
-		payload.Name = path[2]
-		payload.Test = false
-		payload.PrincipalID = record.PrincipalID.PrincipalID
+		log.Printf("Event received %s for bucket %s", time.Now().Format("2006-01-02 15-04-05"), path[1])
+
+		endpoint := fmt.Sprintf("https://loaddatareport.bysidecar.me/import/%s/", path[1])
+
+		log.Printf("endpoint %s", endpoint)
+
+		req, err := http.NewRequest("GET", endpoint, nil)
+		if err != nil {
+			log.Println("error lalallala")
+			return err
+		}
+		q := req.URL.Query()
+		q.Add("bucket", path[1])
+		q.Add("name", path[2])
+		q.Add("test", "false")
+		q.Add("principal", principal[1])
+
+		req.URL.RawQuery = q.Encode()
+
+		log.Printf("url %s", req.URL)
+
+		log.Println(req.URL.RawQuery)
+		http := &http.Client{}
+		_, err = http.Do(req)
+		if err != nil {
+			log.Println(err)
+			log.Println("error making get request")
+			return err
+		}
 	}
-
-	log.Printf("Event received %s for bucket %s", time.Now().Format("2006-01-02 15-04-05"), payload.Bucket)
-
-	endpoint := fmt.Sprintf("https://loaddatareport.bysidecar.me/import/%s", payload.Bucket)
-
-	bytevalues, err := json.Marshal(payload)
-	if err != nil {
-		return err
-	}
-
-	resp, err := http.Post(endpoint, "application/json", bytes.NewBuffer(bytevalues))
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	data, _ := ioutil.ReadAll(resp.Body)
-	response := struct {
-		Success bool   `json:"success"`
-		Message string `json:"message"`
-	}{}
-	if err := json.Unmarshal(data, &response); err != nil {
-		return err
-	}
-	log.Println(response)
 
 	return nil
 }
