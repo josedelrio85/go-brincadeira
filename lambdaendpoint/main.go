@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -17,47 +18,51 @@ import (
 // HandleRequest is
 func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 
+	payload := struct {
+		Bucket string `json:"bucket"`
+		Name   string `json:"name"`
+		Test   bool   `json:"test"`
+	}{}
+
 	for _, record := range s3Event.Records {
 		s3 := record.S3
-		fmt.Printf("[%s - %s] Bucket = %s, Key = %s \n", record.EventSource, record.EventTime, s3.Bucket.Name, s3.Object.Key)
+		fmt.Printf("[%s - %s] ID: %s Bucket = %s, Key = %s \n", record.EventSource, record.EventTime, record.PrincipalID, s3.Bucket.Name, s3.Object.Key)
 		path := strings.Split(s3.Object.Key, "/")
 
 		for _, p := range path {
 			fmt.Println(p)
 		}
 
-		payload := struct {
-			Bucket string `json:"bucket"`
-			Name   string `json:"name"`
-			Test   bool   `json:"test"`
-		}{
-			Bucket: path[1],
-			Name:   path[2],
-		}
-
-		endpoint := fmt.Sprintf("https://algo.bysidecar.me/import/%s", payload.Bucket)
-
-		bytevalues, err := json.Marshal(payload)
-		if err != nil {
-			return err
-		}
-
-		resp, err := http.Post(endpoint, "application/json", bytes.NewBuffer(bytevalues))
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-
-		data, _ := ioutil.ReadAll(resp.Body)
-		response := struct {
-			Success bool   `json:"success"`
-			Message string `json:"message"`
-		}{}
-		if err := json.Unmarshal(data, &response); err != nil {
-			return err
-		}
-		log.Println(response)
+		payload.Bucket = path[1]
+		payload.Name = path[2]
+		payload.Test = false
 	}
+
+	log.Printf("Event received %s for bucket %s", time.Now().Format("2006-01-02 15-04-05"), payload.Bucket)
+
+	endpoint := fmt.Sprintf("https://loaddatareport.bysidecar.me/import/%s", payload.Bucket)
+
+	bytevalues, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(endpoint, "application/json", bytes.NewBuffer(bytevalues))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	data, _ := ioutil.ReadAll(resp.Body)
+	response := struct {
+		Success bool   `json:"success"`
+		Message string `json:"message"`
+	}{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return err
+	}
+	log.Println(response)
+
 	return nil
 }
 
