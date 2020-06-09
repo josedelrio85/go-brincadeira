@@ -20,7 +20,7 @@ type Wsmsql struct {
 type Storer interface {
 	Open() error
 	BatchInsert([]Xmlstruct) error
-	SelectForRequest() ([]Inputdata, error)
+	SelectForRequest(string) ([]Inputdata, error)
 }
 
 // Open opens a Mysql connection using a connstring parameter.
@@ -97,14 +97,16 @@ func (w *Wsmsql) BatchInsert(rows []Xmlstruct) error {
 // SelectForRequest queries in evo_events_sf_v2_pro table looking for the records that matches
 // createddate field is equal to yesterday.
 // Returns an array of Inputdata struct.
-func (w *Wsmsql) SelectForRequest() ([]Inputdata, error) {
-	yesterday := time.Now().Add(time.Duration(-24) * time.Hour)
+func (w *Wsmsql) SelectForRequest(date string) ([]Inputdata, error) {
+	if date == "" {
+		yesterday := time.Now().Add(time.Duration(-24) * time.Hour)
+		date = yesterday.Format("2006-01-02")
+	}
 	sqlselect := fmt.Sprintf(`select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro 
 	where date(CREATEDDATE) = ? group by CLIENTID;`)
 
 	stmt, _ := w.db.Prepare(sqlselect)
-	rows, stmterr := stmt.Query(yesterday.Format("2006-01-02"))
-	// rows, stmterr := stmt.Query("2020-05-18")
+	rows, stmterr := stmt.Query(date)
 	if stmterr != nil {
 		return nil, stmterr
 	}

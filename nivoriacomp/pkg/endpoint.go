@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -49,7 +50,7 @@ func (xe *XMLEntity) Request(data []Inputdata) error {
 		url := "http://www.nivolab.com/dev/api/evo/getGoal.php"
 
 		resp, err := http.Post(url, "application/json", bytes.NewBuffer(json))
-		if err != nil {
+		if err != nil && err != io.EOF {
 			return err
 		}
 		defer resp.Body.Close()

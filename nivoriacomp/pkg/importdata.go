@@ -9,6 +9,7 @@ import (
 // Importer is the structure to handle the needed resources to obtain the input data.
 type Importer struct {
 	Path   string
+	Date   string
 	Data   []Inputdata
 	Storer Storer
 }
@@ -49,7 +50,7 @@ func (a *Importer) Importfromcsv() error {
 
 // Importfromdb obtains the resources used as input from DB.
 func (a *Importer) Importfromdb() error {
-	data, err := a.Storer.SelectForRequest()
+	data, err := a.Storer.SelectForRequest(a.Date)
 	if err != nil {
 		return err
 	}

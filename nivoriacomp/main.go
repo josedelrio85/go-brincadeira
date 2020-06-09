@@ -19,6 +19,7 @@ func main() {
 	// var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
 	var fileconfig = flag.String("fileconfig", "/home/jose/Code/go/src/github.com/bysidecar/go_components/readparams", "path where to read config file")
 	var typeload = flag.String("typeload", "1", "type of data load. 1 => from db; 2=> from csv file")
+	var dateinput = flag.String("date", "", "input date")
 	flag.Parse()
 
 	f, err := os.OpenFile("./nivoriacomp_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
@@ -35,9 +36,11 @@ func main() {
 	}
 	importer := nivoriacomp.Importer{
 		Path:   *basepath,
+		Date:   *dateinput,
 		Storer: wsmsql,
 	}
 
+	log.Printf("date %s ", *dateinput)
 	if err := wsmsql.Open(); err != nil {
 		message := fmt.Sprintf("error opening mysql connection. err %s", err)
 		nivoriacomp.ResponseError(message, err)
