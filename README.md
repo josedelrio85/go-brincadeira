@@ -135,10 +135,9 @@ select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro    where date(
 
 * To compile as linux distribution execute:
 
-```bash
-  set GOOS=linux
-  go build
-```
+  ```bash
+  GOOS=linux go build -o nivoriacomp main.go
+  ```
 
 * Upload the compiled object to Webserice host and set correct permission and owner.
 
