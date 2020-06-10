@@ -40,7 +40,7 @@ func main() {
 		Storer: wsmsql,
 	}
 
-	log.Printf("date %s ", *dateinput)
+	// log.Printf("date %s ", *dateinput)
 	if err := wsmsql.Open(); err != nil {
 		message := fmt.Sprintf("error opening mysql connection. err %s", err)
 		nivoriacomp.ResponseError(message, err)
