@@ -61,29 +61,6 @@ chown apache:apache loadFirmasCSV
 chmod 755 loadFirmasCSV
 ```
 
-## voalarm
-
-This functionality can send an alarm to VictorOps plattform when an execption occurs.
-
-```go
-  // Create an instance of Client struct with no params. SendAlarm will set correct values.
- a := fmt.Errorf("Error. Artificial error: %v", errors.New("emit macho dwarf: elf header corrupted"))
- alarm := voalarm.Client{}
- resp, err := alarm.SendAlarm(voalarm.Acknowledgement, a)
- if err != nil {
-  log.Fatalf("Error creating alarm. Err: %s", err)
- }
- log.Printf("Response: %+v\n", resp)
-
- // Create an instance of Client struct with apikey param setted to "". SendAlarm will set correct values too.
- a := fmt.Errorf("Error. Artificial error: %v", errors.New("emit macho dwarf: elf header corrupted"))
- alarm := voalarm.NewClient("")
- resp, err := alarm.SendAlarm(voalarm.Acknowledgement, a)
- if err != nil {
-  log.Fatalf("Error creating alarm. Err: %s", err)
- }
- log.Printf("Response: %+v\n", resp)
-```
 
 ## encode64
 
@@ -214,3 +191,19 @@ chmod 755 cleanup-inbound-r
 ```bash
 30 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-inbound-r.log 2>&1
 ```
+
+
+## Lambdaendpoint
+
+* This functionality is and endpoint usen as AWS Lambda Functions. 
+
+* Receives a request generated as a multipart finished event in AWS S3 bucket.
+
+* Generates a request to [Load Data Report](https://loaddatareport.bysidecar.me/import/) to fire the proccess of downloading, unzipping and import backups to Leads Report DB environment.
+
+* To use it, you must compile `main.go` file, zip it and upload to Lambda Function menu in AWS.
+
+  ```bash
+  GOOS=linux go build main.go
+  zip lambdaendpoint.zip main
+  ```
