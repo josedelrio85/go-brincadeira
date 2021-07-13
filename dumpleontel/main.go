@@ -6,14 +6,14 @@ import (
 	"runtime"
 	"time"
 
-	dumper "github.com/bysidecar/go_components/dumpleontel/pkg"
-	"github.com/bysidecar/voalarm"
+	dumper "github.com/josedelrio85/go_components/dumpfootel/pkg"
+	"github.com/josedelrio85/voalarm"
 )
 
 func main() {
 	log.Printf("Starting process at %s", time.Now().Format("2006-01-02 15-04-05"))
 
-	propleontel := dumper.Properties{
+	propfootel := dumper.Properties{
 		Tables: []string{
 			"cat_categories",
 			"cli_clients",
@@ -42,10 +42,10 @@ func main() {
 			"usr_users",
 		},
 		Dbname:   "crmti",
-		Filename: "leontel",
+		Filename: "footel",
 	}
-	if err := dumper.Dumper(propleontel); err != nil {
-		sendAlarm("Error dumping leontel", http.StatusInternalServerError, err)
+	if err := dumper.Dumper(propfootel); err != nil {
+		sendAlarm("Error dumping footel", http.StatusInternalServerError, err)
 		log.Fatal(err)
 	}
 

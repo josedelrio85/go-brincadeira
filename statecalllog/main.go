@@ -22,7 +22,7 @@ type State struct {
 func main() {
 
 	var printall = flag.Bool("printall", false, "Set to true if you want to print not desired phones")
-	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\statecalllog", "path to read the posted file")
+	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\statecalllog", "path to read the posted file")
 	var seconds = flag.Int("seconds", 10, "Set the amount of time you want to log")
 
 	flag.Parse()

@@ -4,7 +4,7 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/bysidecar/voalarm"
+	"github.com/josedelrio85/voalarm"
 )
 
 // ResponseError an alarm when an error occurs

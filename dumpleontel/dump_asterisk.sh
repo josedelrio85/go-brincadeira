@@ -40,8 +40,8 @@ ls -l ${FILE3}.gz
 
 # (6) push to s3 bucket
 echo "Uploading file ${FILE3}.gz"
-# /usr/bin/aws s3 cp - s3://data.bysidecar.me/backups/leontel/${FILE}.gz
-aws s3 cp ${FILE3}.gz s3://data.bysidecar.me/backups/leontel/${FILE3}.gz
+# /usr/bin/aws s3 cp - s3://data.josedelrio85.me/backups/footel/${FILE}.gz
+aws s3 cp ${FILE3}.gz s3://data.josedelrio85.me/backups/footel/${FILE3}.gz
 echo "Upload finished"
 
 

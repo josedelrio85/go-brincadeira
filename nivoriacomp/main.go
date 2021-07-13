@@ -7,17 +7,17 @@ import (
 	"os"
 	"time"
 
-	nivoriacomp "github.com/bysidecar/go_components/nivoriacomp/pkg"
-	"github.com/bysidecar/go_components/readparams"
+	nivoriacomp "github.com/josedelrio85/go_components/nivoriacomp/pkg"
+	"github.com/josedelrio85/go_components/readparams"
 )
 
 func main() {
 	start := time.Now().Format("2006-01-02 15:04:05")
 	log.Printf("Process started at %s", start)
 
-	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\nivoriacomp\\creados_EVO.csv", "path where to read csv file")
-	// var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
-	var fileconfig = flag.String("fileconfig", "/home/jose/Code/go/src/github.com/bysidecar/go_components/readparams", "path where to read config file")
+	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\nivoriacomp\\creados_EVO.csv", "path where to read csv file")
+	// var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\readparams", "path where to read config file")
+	var fileconfig = flag.String("fileconfig", "/home/jose/Code/go/src/github.com/josedelrio85/go_components/readparams", "path where to read config file")
 	var typeload = flag.String("typeload", "1", "type of data load. 1 => from db; 2=> from csv file")
 	var dateinput = flag.String("date", "", "input date")
 	flag.Parse()
@@ -59,7 +59,7 @@ func main() {
 	}
 
 	jsondata := nivoriacomp.Jsondata{
-		Network: "bysidecar_evo",
+		Network: "josedelrio85_evo",
 		Token:   "NVR1ab68b1a04e6bbc5029c2f0e6f5b3d64",
 	}
 

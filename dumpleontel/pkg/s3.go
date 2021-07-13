@@ -1,4 +1,4 @@
-package dumpleontel
+package dumpfootel
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ func GetFromS3(filename string, bucket string) error {
 		Region: aws.String("eu-west-1"),
 	})
 
-	bucketpath := "data.bysidecar.me/backups/"
+	bucketpath := "data.josedelrio85.me/backups/"
 	bucket = fmt.Sprintf("%s%s/", bucketpath, bucket)
 	log.Printf("bucket: %s", bucket)
 	// Create a file to write the S3 Object contents to.

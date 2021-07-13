@@ -12,7 +12,7 @@
 #----------------------------------------------------------
 
 # (1) set up all the mysqldump variables
-FILE=leontel_`date +"%Y_%m_%d"`.sql
+FILE=footel_`date +"%Y_%m_%d"`.sql
 DBSERVER=127.0.0.1
 DATABASE=crmti
 USER=root
@@ -35,8 +35,8 @@ ls -l ${FILE}.gz
 
 # (6) push to s3 bucket
 echo "Uploading file ${FILE}.gz"
-# /usr/bin/aws s3 cp - s3://data.bysidecar.me/backups/leontel/${FILE}.gz
-aws s3 cp ${FILE}.gz s3://data.bysidecar.me/backups/leontel/${FILE}.gz
+# /usr/bin/aws s3 cp - s3://data.josedelrio85.me/backups/footel/${FILE}.gz
+aws s3 cp ${FILE}.gz s3://data.josedelrio85.me/backups/footel/${FILE}.gz
 echo "Upload finished"
 
 

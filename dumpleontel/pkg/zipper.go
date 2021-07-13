@@ -1,4 +1,4 @@
-package dumpleontel
+package dumpfootel
 
 import (
 	"compress/gzip"

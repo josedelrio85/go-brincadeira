@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bysidecar/go_components/implementeddb"
-	"github.com/bysidecar/go_components/readparams"
+	"github.com/josedelrio85/go_components/implementeddb"
+	"github.com/josedelrio85/go_components/readparams"
 )
 
 // Env is a struct which contains a sql.DB property
@@ -22,8 +22,8 @@ type Env struct {
 
 func main() {
 
-	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\loadFormalizadasCSV", "path to read the posted file")
-	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
+	var basepath = flag.String("basepath", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\loadFormalizadasCSV", "path to read the posted file")
+	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\readparams", "path where to read config file")
 	flag.Parse()
 
 	f, err := os.OpenFile("../loadFormalizadasCSV_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)

@@ -27,7 +27,7 @@ SELECT * FROM webservice.evo_formalizadas_sf_v2 where date(FECHA_FORMALIZACION) 
 * Upload the compiled object to Sira host and set correct permission and owner.
 
 ```bash
-/var/www/vhosts/dashboard.bysidecar.es/custom/plugins/loadFormalizadasCSV
+/var/www/vhosts/dashboard.josedelrio85.es/custom/plugins/loadFormalizadasCSV
 chown apache:apache loadFormalizadasCSV
 chmod 755 loadFormalizadasCSV
 ```
@@ -56,7 +56,7 @@ SELECT * FROM webservice.evo_firmados_sf_v2 where date(Fecha_de_firma) >= '2018-
 * Upload the compiled object to Sira host and set correct permission and owner.
 
 ```bash
-/var/www/vhosts/dashboard.bysidecar.es/custom/plugins/loadFirmasCSV
+/var/www/vhosts/dashboard.josedelrio85.es/custom/plugins/loadFirmasCSV
 chown apache:apache loadFirmasCSV
 chmod 755 loadFirmasCSV
 ```
@@ -91,7 +91,7 @@ It does not interact with the asterisk system directly. Instead it reads a json 
   * basepath: json file path
   
   ```bash
-  ./main --seconds=15 --printall=true --basepath=/var/www/privateBySidecar/realTimeData
+  ./main --seconds=15 --printall=true --basepath=/var/www/privatejosedelrio85/realTimeData
   ```
 
 ## Nivoria
@@ -119,7 +119,7 @@ select CLIENTID, CREATEDDATE FROM webservice.evo_events_sf_v2_pro    where date(
 * Upload the compiled object to Webserice host and set correct permission and owner.
 
 ```bash
-/etc/srv/bysidecar/bin/github.com/bysidecar/nivoriacomp/
+/etc/srv/josedelrio85/bin/github.com/josedelrio85/nivoriacomp/
 chown apache:apache nivoriacomp
 chmod 755 nivoriacomp
 ```
@@ -127,7 +127,7 @@ chmod 755 nivoriacomp
 * Instruction to automatic execute the script
 
 ```bash
-20 2 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/nivoriacomp/ && ./nivoriacomp -fileconfig=/var/www/privateBySidecar/ > /var/log/nivoriacomp.log 2>&1
+20 2 * * * cd /etc/srv/josedelrio85/bin/github.com/josedelrio85/nivoriacomp/ && ./nivoriacomp -fileconfig=/var/www/privatejosedelrio85/ > /var/log/nivoriacomp.log 2>&1
 ```
 
 ## Cleanup Evo leads
@@ -150,7 +150,7 @@ chmod 755 nivoriacomp
 * Upload the compiled object to Webserice host and set correct permission and owner.
 
 ```bash
-/etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-evo-leads/
+/etc/srv/josedelrio85/bin/github.com/josedelrio85/cleanup-evo-leads/
 chown apache:apache cleanup-evo-leads
 chmod 755 cleanup-evo-leads
 ```
@@ -158,7 +158,7 @@ chmod 755 cleanup-evo-leads
 * Instruction to automatic execute the script
 
 ```bash
-20 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-evo-leads/ && ./cleanup-evo-leads -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-evo-leads.log 2>&1
+20 3 * * * cd /etc/srv/josedelrio85/bin/github.com/josedelrio85/cleanup-evo-leads/ && ./cleanup-evo-leads -fileconfig=/******/privatejosedelrio85/ > /var/log/cleanup-evo-leads.log 2>&1
 ```
 
 ## Cleanup Inbound R
@@ -181,7 +181,7 @@ chmod 755 cleanup-evo-leads
 * Upload the compiled object to Webserice host and set correct permission and owner.
 
 ```bash
-/etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/
+/etc/srv/josedelrio85/bin/github.com/josedelrio85/cleanup-inbound-r/
 chown apache:apache cleanup-inbound-r
 chmod 755 cleanup-inbound-r
 ```
@@ -189,7 +189,7 @@ chmod 755 cleanup-inbound-r
 * Instruction to automatic execute the script
 
 ```bash
-30 3 * * * cd /etc/srv/bysidecar/bin/github.com/bysidecar/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privateBySidecar/ > /var/log/cleanup-inbound-r.log 2>&1
+30 3 * * * cd /etc/srv/josedelrio85/bin/github.com/josedelrio85/cleanup-inbound-r/ && ./cleanup-inbound-r -fileconfig=/******/privatejosedelrio85/ > /var/log/cleanup-inbound-r.log 2>&1
 ```
 
 
@@ -199,7 +199,7 @@ chmod 755 cleanup-inbound-r
 
 * Receives a request generated as a multipart finished event in AWS S3 bucket.
 
-* Generates a request to [Load Data Report](https://loaddatareport.bysidecar.me/import/) to fire the proccess of downloading, unzipping and import backups to Leads Report DB environment.
+* Generates a request to [Load Data Report](https://loaddatareport.josedelrio85.me/import/) to fire the proccess of downloading, unzipping and import backups to Leads Report DB environment.
 
 * To use it, you must compile `main.go` file, zip it and upload to Lambda Function menu in AWS.
 

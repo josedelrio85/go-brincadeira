@@ -9,9 +9,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/bysidecar/go_components/implementeddb"
-	"github.com/bysidecar/go_components/readparams"
-	"github.com/bysidecar/voalarm"
+	"github.com/josedelrio85/go_components/implementeddb"
+	"github.com/josedelrio85/go_components/readparams"
+	"github.com/josedelrio85/voalarm"
 )
 
 //Database is a struct that represents MySQL db instance
@@ -20,7 +20,7 @@ type Database struct {
 }
 
 func main() {
-	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\bysidecar\\go_components\\readparams", "path where to read config file")
+	var fileconfig = flag.String("fileconfig", "C:\\Users\\Jose\\go\\src\\github.com\\josedelrio85\\go_components\\readparams", "path where to read config file")
 	flag.Parse()
 
 	file, err := os.OpenFile("./cleanup-inbound-r_log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)

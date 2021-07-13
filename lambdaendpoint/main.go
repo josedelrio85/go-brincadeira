@@ -27,7 +27,7 @@ func HandleRequest(ctx context.Context, s3Event events.S3Event) error {
 
 		log.Printf("Event received %s for bucket %s", time.Now().Format("2006-01-02 15-04-05"), path[1])
 
-		endpoint := fmt.Sprintf("https://loaddatareport.bysidecar.me/import/%s/", path[1])
+		endpoint := fmt.Sprintf("https://loaddatareport.josedelrio85.me/import/%s/", path[1])
 
 		log.Printf("endpoint %s", endpoint)
 

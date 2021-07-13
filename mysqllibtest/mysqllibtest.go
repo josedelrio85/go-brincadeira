@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/bysidecar/go_components/mysqllibtest/implementeddb"
-	"github.com/bysidecar/go_components/mysqllibtest/models"
-	"github.com/bysidecar/go_components/readparams"
+	"github.com/josedelrio85/go_components/mysqllibtest/implementeddb"
+	"github.com/josedelrio85/go_components/mysqllibtest/models"
+	"github.com/josedelrio85/go_components/readparams"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
